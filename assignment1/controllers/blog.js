@@ -1,6 +1,16 @@
-export const getAllBlogs = (req, res)=>{}
+import { allBlogs } from "../data/blog.js";
 
-export const getBlogById = (req, res)=>{}
+export const getAllBlogs = async (req, res)=>{
+    const result = await allBlogs();
+   
+    return res.status(200).send({msg: result});
+
+}
+
+export const getBlogById = (req, res)=>{
+    console.log(req.session.user);
+    return res.send("hello there");
+}
 
 export const addBlog = (req, res)=>{}
 

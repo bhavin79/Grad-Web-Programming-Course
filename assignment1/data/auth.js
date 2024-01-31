@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 
 export const checkIfUserExists = async(username)=>{
     username = validations.validString(username, "username");
+    console.log(username);
     const userCollection = await users();
     const user = await userCollection.findOne({"username":username });
     return user;

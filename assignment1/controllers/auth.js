@@ -19,13 +19,15 @@ export const register = async(req, res)=>{
         return res.status(400).json({error: error, banner: 
             "Password length should be a minimum of 8 character with atleast one upercase, atleast one number, atleast one special character, and no spaces"})
     }
+    
     //TODO: check if user is already logged in: maybe in middleware;
 
     //check if user exists
     try {
-        if(await checkIfUserExists(username)){
+        let existingUser = await checkIfUserExists(username);
+        if(existingUser== null){
             return res.status(400).json({error:"Username already exists"});
-        };
+        }
     } catch (error) {
         return res.status(400).json(error);
     }
@@ -44,8 +46,13 @@ export const register = async(req, res)=>{
 
 export const signUp = async(req, res)=>{
     let {username, password} = req.body;
-    username = validations.validString(username, "username");
-    password = validations.validString(password, "password");
+    try {
+        username = validations.validString(username, "username");
+        password = validations.validString(password, "password");
+    } catch (error) {
+        return res.status(400).json(error);
+    }
+    
     let userData = undefined;
     try {
         userData = await checkIfUserExists(username);
@@ -71,8 +78,9 @@ export const signUp = async(req, res)=>{
 }  
 
 export const logout = async(req, res)=>{
-    console.log(req.session.user);
-
+    console.log("log out function");
+    req.session.destroy();
+    res.status(200).json({msg: "You have been logged out"});
 }
 
 

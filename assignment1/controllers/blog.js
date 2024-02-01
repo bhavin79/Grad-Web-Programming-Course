@@ -3,7 +3,8 @@ import validations from "../utils/validation.js";
 
 export const getAllBlogs = async (req, res)=>{   
     try {
-        const result = await allBlogs(req.query);    
+        const result = await allBlogs(req.query);   
+        console.log(result); 
         return res.status(200).json(result);
     } catch (error) {
         return res.status(400).json(error);
@@ -11,7 +12,7 @@ export const getAllBlogs = async (req, res)=>{
    
 }
 
-export const getBlogById = async(req, res)=>{
+export const getBlogById = async(req, res)=>{ 
     let id = req.params;
     try {
         id = validations.validObjectId(id, "blog id");

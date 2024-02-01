@@ -25,7 +25,7 @@ export const register = async(req, res)=>{
     //check if user exists
     try {
         let existingUser = await checkIfUserExists(username);
-        if(existingUser== null){
+        if(existingUser != null){
             return res.status(400).json({error:"Username already exists"});
         }
     } catch (error) {

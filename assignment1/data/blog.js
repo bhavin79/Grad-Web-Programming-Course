@@ -18,10 +18,12 @@ export const allBlogs = async(query)=>{
     }else{
         limit = 20
     }
-    const blogCollection = await blogs();
-     
-    let result = await blogCollection.find({}).skip(skip).limit(limit).toArray();
-    return ObjectIdToString(result);
+    const blogCollection = await blogs(); 
+    // let result = await blogCollection.find({}).skip(skip).limit(limit).toArray();
+    // result =  ObjectIdToString(result);
+    // return result;
+
+    return {val: "all blogs"};
     //TODO: verify;
     // TODO: _id to string
 }

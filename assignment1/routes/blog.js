@@ -3,7 +3,7 @@ import {getAllBlogs, getBlogById, postBlog, putBlogById, patchBlogById, addComme
 import { register, signUp, logout } from "../controllers/auth.js";
 const router = Router();
 
-router.route('/').get(getAllBlogs).post(postBlog);
+router.route('/' ).get(getAllBlogs).post(postBlog);
 router.route("/logout").get(logout);
 router.route("/register").post(register);
 router.route("/signin").post(signUp);

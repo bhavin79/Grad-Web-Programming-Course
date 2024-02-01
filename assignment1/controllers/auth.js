@@ -20,7 +20,6 @@ export const register = async(req, res)=>{
             "Password length should be a minimum of 8 character with atleast one upercase, atleast one number, atleast one special character, and no spaces"})
     }
     
-    //TODO: check if user is already logged in: maybe in middleware;
 
     //check if user exists
     try {
@@ -57,7 +56,7 @@ export const signUp = async(req, res)=>{
     try {
         userData = await checkIfUserExists(username);
         if(userData == null){
-            res.status(401).json({error: "Either passowrd or username is incorrect"});
+            res.status(400).json({error: "Either passowrd or username is incorrect"});
         }
     } catch (error) {
         res.status(400).json(error);
@@ -73,7 +72,7 @@ export const signUp = async(req, res)=>{
         return res.status(200).json(userData);
     }
     else{
-        return res.status(401).json({error: "Either passowrd or username is incorrect"})
+        return res.status(400).json({error: "Either passowrd or username is incorrect"})
     }
 }  
 

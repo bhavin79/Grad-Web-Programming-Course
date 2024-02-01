@@ -1,9 +1,26 @@
 import { allBlogs, getSingleBlog, postComment, putBlog, updateBlog, addBlog , removeComment} from "../data/blog.js";
+import { ObjectIdToString } from "../utils/helper.js";
 import validations from "../utils/validation.js";
 
 export const getAllBlogs = async (req, res)=>{   
+    let {skip, limit} = req.query;
+    if(skip){
+        try {
+            skip = validations.validNumber(Number(skip), "skip", 0); 
+        } catch (error) {
+            return res.status(400).json(error);
+        }
+    }
+    if(limit){
+        try {
+            limit = validations.validNumber(Number(limit), "limit", 0, 100); 
+        } catch (error) {
+            return res.status(400).json(error);
+        }
+    }
+    
     try {
-        const result = await allBlogs(req.query);   
+        const result = await allBlogs(req.query); 
         console.log(result); 
         return res.status(200).json(result);
     } catch (error) {
@@ -13,20 +30,20 @@ export const getAllBlogs = async (req, res)=>{
 }
 
 export const getBlogById = async(req, res)=>{ 
-    let id = req.params;
-    try {
+    let {id} = req.params;
+    try {    
         id = validations.validObjectId(id, "blog id");
     } catch (error) {
         return res.status(400).json(error);
     }
-    
+
     try {
-        const result = await getSingleBlog(id);
+        let result = await getSingleBlog(id);
+        result = ObjectIdToString(result);
         return res.status(200).json(result);
     } catch (error) {
         return res.status(400).json(error);
     }
-    // console.log(req.session.user);      
 }
 
 export const postBlog = async (req, res)=>{
@@ -97,7 +114,7 @@ export const patchBlogById =async (req, res)=>{
     try {
         const originalBlog = await getSingleBlog(blogId);
         if(originalBlog.userThatPosted._id.toString() != userId){
-            return res.status(401).json({error: 'You are not the owner of this blog post'});
+            return res.status(403).json({error: 'You are not the owner of this blog post'});
         }
         const result = await updateBlog({blogTitle, blogBody, blogId});
         return res.status(200).json(result);

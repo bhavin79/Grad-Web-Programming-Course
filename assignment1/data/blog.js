@@ -18,14 +18,14 @@ export const allBlogs = async(query)=>{
     }else{
         limit = 20
     }
+    console.log(skip, limit);
     const blogCollection = await blogs(); 
-    // let result = await blogCollection.find({}).skip(skip).limit(limit).toArray();
-    // result =  ObjectIdToString(result);
-    // return result;
-
-    return {val: "all blogs"};
-    //TODO: verify;
-    // TODO: _id to string
+    let result = await blogCollection.find({}).skip(skip).limit(limit).toArray();
+    console.log("result",result);
+    result =  result.map((doc)=>{
+        return ObjectIdToString(doc);
+    })
+    return result;
 }
 
 export const getSingleBlog = async(id)=>{
@@ -36,7 +36,6 @@ export const getSingleBlog = async(id)=>{
         throw "blog does not exist";
     }
     return result;
-    //TODO: format output;
 }
 
 export const addBlog = async ({blogTitle, blogBody, userId, username})=>{    
@@ -79,7 +78,6 @@ export const putBlog = async({blogTitle, blogBody, userId, blogId, username})=>{
     }
     result = ObjectIdToString(result);
     return result;
-    //TODO: format output;
 }
 
 export const updateBlog =async({blogTitle, blogBody,  blogId})=>{
@@ -96,15 +94,13 @@ export const updateBlog =async({blogTitle, blogBody,  blogId})=>{
     blogId = validations.validObjectId(blogId, "blog ID");
     console.log(updateBlog);
     const blogCollection = await blogs();
-    const result = await blogCollection.findOneAndUpdate({_id: new ObjectId(blogId)}, {$set: updateBlog}, {returnDocument: 'after'});
+    let result = await blogCollection.findOneAndUpdate({_id: new ObjectId(blogId)}, {$set: updateBlog}, {returnDocument: 'after'});
     if(result == null){
         throw `Could not PATCH blog`;
     }
-
+    
     result = ObjectIdToString(result);
-
     return result;
-    // TODO: format result;
 }
 
 export const postComment = async({userId, blogId, comment, username})=>{
@@ -126,10 +122,8 @@ export const postComment = async({userId, blogId, comment, username})=>{
         throw `Could not add comment`;
     }
     result = ObjectIdToString(result);
-    console.log(result.comments);
     return result;
 
-    // TODO: format result;
 }
 
 export const removeComment = async({blogId, userId, commentId})=>{
@@ -147,4 +141,3 @@ export const removeComment = async({blogId, userId, commentId})=>{
     return `comment ${commentId} is deleted`;
 }
 
-//TODO: comment does not exist middleware logic

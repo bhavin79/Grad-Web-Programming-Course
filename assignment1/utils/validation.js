@@ -24,6 +24,7 @@ const validString = (string, parameter = "input", maxLength = null) => {
 
   
   const validNumber = (num, parameter = "input", min = null, max = null) => {
+    console.log(num, min);
     if (typeof num == "undefined") {
       throw `${parameter} should be provided`;
     }
@@ -33,12 +34,13 @@ const validString = (string, parameter = "input", maxLength = null) => {
     if (Number.isNaN(num)) {
       throw `Valid number required for ${parameter}`;
     }
-    if (min) {
+    if (min != null) {
+
       if (num < min) {
         throw `${parameter} can must be greater than ${min}`;
       }
     }
-    if (max) {
+    if (max != null) {
       if (num > max) {
         throw `${parameter} can must be less than ${max}`;
       }

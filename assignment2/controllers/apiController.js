@@ -33,7 +33,6 @@ const getLaunchesById = async(id)=>{
      }
 const getCapsulesById = async(id)=>{
         id = validString(id, "Rocket ID");
-
         const result = await API.get(`capsules/${id}`);
         return result.data;
    }

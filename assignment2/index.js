@@ -13,7 +13,7 @@ configRoutes(app);
 
 const start = async () => {
     try {
-        const client = await getRedisClient();
+        // const client = await getRedisClient();
         // await client.flushDb();
         app.listen(port, ()=>{
         console.log("Server is listening on port 3000 localhost");

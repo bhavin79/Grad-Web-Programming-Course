@@ -9,11 +9,12 @@ export const rocketsCache = async (req, res, next)=>{
     try {
         const client = await getRedisClient();
         const rocketData = await client.json.get('rockets');
+        console.log(rocketData);
         if(rocketData){
             return res.json(rocketData);
         }
     } catch (error) {
-        
+        next();
     }
 
     next();
@@ -31,7 +32,7 @@ export const launchesCache = async (req, res, next)=>{
             return res.json(launchesData);
         }
     } catch (error) {
-        
+        next();
     }
 
     next();
@@ -48,7 +49,7 @@ export const capsulesCache = async (req, res, next)=>{
             return res.json(capsulesData);
         }
     } catch (error) {
-        
+        next();
     }
 
     next();
@@ -78,7 +79,8 @@ export const rocketCache = async (req, res, next)=>{
             return res.json(rocketData);
         } 
     } catch (error) {
-        
+        next();
+
     }
  
     next();
@@ -100,7 +102,8 @@ export const launcheCache = async (req, res, next)=>{
             return res.json(launchData);
         }
     } catch (error) {
-        
+        next();
+
     }
 
     next();
@@ -121,7 +124,8 @@ export const capsuleCache = async (req, res, next)=>{
             return res.json(capsuleData);
         }
     } catch (error) {
-        
+        next();
+
     }
 
     next();

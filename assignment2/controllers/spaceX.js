@@ -4,25 +4,41 @@ import { getRedisClient } from "../config/redisConnect.js";
 
 export const getRockets = async(req, res)=>{
     console.log("rockets route");
+    let result = undefined;
     try {
-        const result = await spaceXApiController.getRockets();
+        result = await spaceXApiController.getRockets();
+    }
+    catch(error){
+        if(error.response && error.response.status &&error.response.statusText){
+            return res.status(error.response.status).json(error.response.statusText)
+          }
+        return res.status(400).json(error)
+    }
+    try{
         const client = await getRedisClient();
         await client.json.set('rockets', '$', result);
-        return res.json(result);
     } catch (error) {
-        res.status(400).json(error)
+
     }
+    return res.json(result);
 }
 export const getLaunches = async(req, res)=>{
     console.log("launches route");
 
     try {
         const result = await spaceXApiController.getLaunches();
-        const client = await getRedisClient();
-        await client.json.set("launches", '$', result);
-        res.json(result);
+       try {        
+            const client = await getRedisClient();
+            await client.json.set("launches", '$', result);
+       } catch (error) {  
+       }
+
+        return res.json(result);
     } catch (error) {
-        res.status(400).json(error)
+        if(error.response && error.response.status &&error.response.statusText){
+            return res.status(error.response.status).json(error.response.statusText)
+          }
+        return res.status(400).json(error)
     }
 }
 export const getCapsules = async(req, res)=>{
@@ -30,11 +46,16 @@ export const getCapsules = async(req, res)=>{
 
     try {
         const result = await spaceXApiController.getCapsules();
-        const client = await getRedisClient();
-        await client.json.set("capsules", '$', result);
-        res.json(result);
+        try {
+            const client = await getRedisClient();
+            await client.json.set("capsules", '$', result);
+        } catch (error) {
+            
+        }
+
+       return res.json(result);
     } catch (error) {
-        res.status(400).json(error)
+        return res.status(400).json(error)
     }
 }
 export const getRocketsById = async(req, res)=>{
@@ -45,14 +66,20 @@ export const getRocketsById = async(req, res)=>{
     try {
         id = validString(id)
         const result = await spaceXApiController.getRocketsById(id);
-        const client = await getRedisClient();
-        await client.json.set(`rocket:${id}`, '$', result);
-        const jsonToString = JSON.stringify(result);
-        await client.LPUSH('history', jsonToString);
-        if(await client.LLEN('history') > 20){
-            await client.RPOP('history');
+
+        try {
+            const client = await getRedisClient();
+            await client.json.set(`rocket:${id}`, '$', result);
+            const jsonToString = JSON.stringify(result);
+            await client.LPUSH('history', jsonToString);
+            if(await client.LLEN('history') > 20){
+                await client.RPOP('history');
+            }
+        } catch (error) {
+            
         }
-        res.json(result);
+
+       return res.json(result);
     } catch (error) {
         if(error.response && error.response.status &&error.response.statusText){
           return res.status(error.response.status).json(error.response.statusText)
@@ -68,8 +95,13 @@ export const getLaunchesById = async(req, res)=>{
     try {
         id = validString(id)
         const result = await spaceXApiController.getLaunchesById(id);
-        const client = await getRedisClient();
-        await client.json.set(`launche:${id}`, '$', result);
+        try {  
+            const client = await getRedisClient();
+            await client.json.set(`launche:${id}`, '$', result);
+        } catch (error) {
+            
+        }
+      
         res.json(result);
     } catch (error) {
         if(error.response && error.response.status && error.response.statusText){
@@ -85,13 +117,28 @@ export const getCapsulesById = async(req, res)=>{
     try {
         id = validString(id)
         const result = await spaceXApiController.getCapsulesById(id);
-        const client = await getRedisClient();
-        await client.json.set(`capsule:${id}`, '$', result);
-        res.json(result);
+        try {
+            const client = await getRedisClient();
+            await client.json.set(`capsule:${id}`, '$', result);
+        } catch (error) {
+            
+        }
+        return res.json(result);
     } catch (error) {
         if(error.response && error.response.status && error.response.statusText){
             return res.status(error.response.status).json(error.response.statusText)
         }
         return res.status(400).json(error);
+    }
+}
+
+export const getRocketHistory = async(req, res)=>{
+    try {
+        const client = await getRedisClient();
+        const strings = await client.LRANGE('history', 0, -1);
+        const result = strings.map((obj)=>{ return JSON.parse(obj)});
+        res.json(result);
+    } catch (error) {
+        res.status(500).json("Something went wrong");
     }
 }

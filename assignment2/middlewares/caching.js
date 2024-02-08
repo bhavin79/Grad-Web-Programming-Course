@@ -6,11 +6,16 @@ export const rocketsCache = async (req, res, next)=>{
     if(req.path.length>2){
         return next();
     }
-    const client = await getRedisClient();
-    const rocketData = await client.json.get('rockets');
-    if(rocketData){
-        return res.json(rocketData);
+    try {
+        const client = await getRedisClient();
+        const rocketData = await client.json.get('rockets');
+        if(rocketData){
+            return res.json(rocketData);
+        }
+    } catch (error) {
+        
     }
+
     next();
 }
 
@@ -19,11 +24,16 @@ export const launchesCache = async (req, res, next)=>{
     if(req.path.length>2){
         return next();
     }
-    const client = await getRedisClient();
-    const launchesData = await client.json.get('launches');
-    if(launchesData){
-        return res.json(launchesData);
+    try {
+        const client = await getRedisClient();
+        const launchesData = await client.json.get('launches');
+        if(launchesData){
+            return res.json(launchesData);
+        }
+    } catch (error) {
+        
     }
+
     next();
 }
 export const capsulesCache = async (req, res, next)=>{
@@ -31,11 +41,16 @@ export const capsulesCache = async (req, res, next)=>{
     if(req.path.length>2){
         return next();
     }
-    const client = await getRedisClient();
-    const capsulesData = await client.json.get('capsules');
-    if(capsulesData){
-        return res.json(capsulesData);
+    try {
+        const client = await getRedisClient();
+        const capsulesData = await client.json.get('capsules');
+        if(capsulesData){
+            return res.json(capsulesData);
+        }
+    } catch (error) {
+        
     }
+
     next();
 }
 
@@ -50,11 +65,22 @@ export const rocketCache = async (req, res, next)=>{
     } catch (error) {
         return res.status(400).json(error);
     }
-    const client = await getRedisClient();
-    const rocketData = await client.json.get(`rocket:${id}`);
-    if(rocketData){
-        return res.json(rocketData);
+    try {
+        const client = await getRedisClient();
+        const rocketData = await client.json.get(`rocket:${id}`);
+        if(rocketData){
+            const jsonToString = JSON.stringify(rocketData);
+            await client.LPUSH('history', jsonToString);
+            console.log(await client.LLEN('history'));
+            if(await client.LLEN('history') > 20){
+                await client.RPOP('history');
+            }
+            return res.json(rocketData);
+        } 
+    } catch (error) {
+        
     }
+ 
     next();
 }
 
@@ -67,12 +93,16 @@ export const launcheCache = async (req, res, next)=>{
     } catch (error) {
         return res.status(400).json(error);
     }
-    
-    const client = await getRedisClient();
-    const launchData = await client.json.get(`launche:${id}`);
-    if(launchData){
-        return res.json(launchData);
+    try {
+        const client = await getRedisClient();
+        const launchData = await client.json.get(`launche:${id}`);
+        if(launchData){
+            return res.json(launchData);
+        }
+    } catch (error) {
+        
     }
+
     next();
 }
 export const capsuleCache = async (req, res, next)=>{
@@ -84,11 +114,15 @@ export const capsuleCache = async (req, res, next)=>{
     } catch (error) {
         return res.status(400).json(error);
     }
-
-    const client = await getRedisClient();
-    const capsuleData = await client.json.get(`capsule:${id}`);
-    if(capsuleData){
-        return res.json(capsuleData);
+    try {
+        const client = await getRedisClient();
+        const capsuleData = await client.json.get(`capsule:${id}`);
+        if(capsuleData){
+            return res.json(capsuleData);
+        }
+    } catch (error) {
+        
     }
+
     next();
 }

@@ -3,6 +3,7 @@ import {startStandaloneServer} from '@apollo/server/standalone';
 
 import {typeDefs} from './typeDefs.js';
 import {resolvers} from './resolvers.js';
+import validations from './validation.js';
 
 const server = new ApolloServer({
   typeDefs,
@@ -14,3 +15,5 @@ const {url} = await startStandaloneServer(server, {
 });
 
 console.log(`Server ready at: ${url}`);
+
+

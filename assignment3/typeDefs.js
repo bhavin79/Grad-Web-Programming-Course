@@ -54,4 +54,63 @@ enum MusicGenre {
 }
 
 scalar Date
+
+type Mutation {
+    addArtist(
+      name: String!, 
+      date_formed: Date!, 
+      members: [String!]!
+    ): Artist,
+
+    editArtist(
+      _id: String!, 
+      name: String, 
+      date_formed: Date, 
+      members: [String!]
+    ): Artist,
+
+    removeArtist(_id: String!): Artist,
+
+    addCompany(
+      name: String!, 
+      founded_year: Int!, 
+      country: String!
+    ):RecordCompany,
+
+    editCompany(
+      _id: String!, 
+      name: String, 
+      founded_year: Int, 
+      country: String
+      ):RecordCompany,
+
+    removeCompany(
+      _id: String!
+    ):RecordCompany,
+
+
+    addAlbum(
+      title: String!, 
+      releaseDate: Date!, 
+      genre: MusicGenre!, 
+      songs: [String!]!, 
+      artistId: String!, 
+      companyId: String!
+      ):Album,
+
+    editAlbum(
+      _id: String!, 
+      title: String, 
+      releaseDate: Date, 
+      genre: MusicGenre, 
+      songs: [String!], 
+      artistId: String, 
+      companyId: String
+      ):Album,
+
+    removeAlbum(
+      _id: String!
+      ): Album
+   
+  }
 `;

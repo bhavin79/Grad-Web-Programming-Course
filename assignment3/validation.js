@@ -102,6 +102,48 @@ const validArrayOfStrings = (array, parameter = "input") => {
   if (arr.length === 0) throw `${parameter} is an empty array`;
   return arr;
 };
-const validations ={validString, validNumber, validObjectId, validDate, validArrayOfStrings};
+
+const dateFormat = (date)=>{
+    return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`
+}
+
+const validDuration = (duration)=>{
+  duration = validString(duration, "duration");  
+  
+  const dur = duration.split(":");
+    if(dur.length!=2){
+        throw `Invalid Date format. MM:SS is required; eg 03:10`
+    }
+    
+    if(dur[0].length != 2 || dur[1].length !=2){
+      throw `Invalid Date format. MM:SS is required; eg 03:10`
+
+    }
+
+    validNumber(Number(dur[0]), "minutes",0, 60);
+    validNumber(Number(dur[1]), "seconds",0, 60);
+
+  return duration;
+}
+
+const validGenre = (genre)=>{
+  const genreSet = new Set([ "POP",
+    "ROCK",
+    "HIP_HOP",
+    "COUNTRY",
+    "JAZZ",
+    "CLASSICAL",
+    "ELECTRONIC",
+    "R_AND_B",
+    "INDIE",
+    "ALTERNATIVE"]);
+  genre = validString(genre, "genre");
+  let upperGenre = genre.toUpperCase();
+  if(!genreSet.has(upperGenre)){
+    throw `Invalid genre`;
+  }
+  return genre.toLowerCase();
+}
+const validations ={validString, validNumber, validObjectId, validDate, validArrayOfStrings, dateFormat, validDuration, validGenre};
 
 export default validations;

@@ -4,25 +4,13 @@ export const getAll = async(collection, query= undefined)=>{
             const result = await collectionRef.find(query).toArray();
             return result;
         }
-        const result = await collectionRef.find({}).toArray();
-
-       return result.map((obj)=>{
-            if(obj._id){
-                obj.id = obj._id;
-                delete obj._id;
-                return obj
-            }
-            else{
-                return obj
-            }
-       })
-}
+        let result = await collectionRef.find({}).toArray();
+        return result
+    }
 
 export const getOne = async(collection, query)=>{
     const collectionRef = await collection();
-    const result = await collectionRef.findOne(query);
-    result.id = result._id;
-    delete result._id;
+    let result = await collectionRef.findOne(query);
     return result;
 }
 
@@ -42,5 +30,11 @@ export const deleteOne = async(collection, query)=>{
 export const findOneAndUpdate = async(collection, query1, query2)=>{
     const collectionRef = await collection();
     const result = await collectionRef.findOneAndUpdate(query1, query2);
+    return result;
+}
+
+export const deleteMany = async(collection, query)=>{
+    const collectionRef = await collection();
+    const result = await collectionRef.deleteMany(query);
     return result;
 }

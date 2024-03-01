@@ -10,6 +10,14 @@ export const AddTodo =({addTodo})=>{
         date: '',
     });
 
+    const getDateToString = ()=>{
+        let currDate =  new Date();
+        let month = `0${currDate.getMonth() +1}`.slice(-2);
+        let date = `0${currDate.getDate()}`.slice(-2);
+        return `${currDate.getFullYear()}-${month}-${date}`
+    }
+    const [minDate, setMinDate] = useState(getDateToString());
+
     const handleStringValidation = (string, parameter= "input", minLength)=>{
         string = string.trim();
         if (string.length == 0)
@@ -79,8 +87,8 @@ export const AddTodo =({addTodo})=>{
             <label htmlFor="descriptionInput" id= "descriptionLabel">Description: </label>
             <input type="textarea" id = "descriptionInput" value={newTodo.description} onChange={(e)=>setNewTodo({...newTodo, description: e.target.value})}></input><br/>
             
-            <label htmlFor="dateInput" id= "dateLabel">Due Date: </label>
-            <input type="date" id="dateInput" value={newTodo.date} onChange={(e)=> setNewTodo({...newTodo, date: e.target.value})}></input><br/><br/>
+            <label htmlFor="dateInput" id= "dateLabel">Due: </label>
+            <input type="date" min={minDate} id="dateInput" value={newTodo.date} onChange={(e)=> setNewTodo({...newTodo, date: e.target.value})}></input><br/><br/>
            
             <button type="submit">Add!</button><br/>
 

@@ -26,7 +26,7 @@ export const AddTodo =({addTodo})=>{
         date = handleStringValidation(date, 'date');
         let inputDate = new Date(date+"T00:00:00");
         let currDate = new Date();
-     
+        
         if(inputDate.getFullYear()<currDate.getFullYear()){
             throw `Due date can't be in past`;
         }
@@ -35,36 +35,39 @@ export const AddTodo =({addTodo})=>{
                 throw `Due date can't be in past`;
             }
             else if(inputDate.getMonth()==currDate.getMonth()){
-                console.log(inputDate.getDate(), currDate.getDate(), inputDate, currDate)
                 if(inputDate.getDate()< currDate.getDate()){
                     throw `Due date can't be in past`;
                 }
             }
         }
 
-        return `${inputDate.getMonth()}/${inputDate.getDate()}/${inputDate.getFullYear()}`;
+        return `${inputDate.getMonth() + 1}/${inputDate.getDate()}/${inputDate.getFullYear()}`;
     }
 
     const hanleSubmit = (e)=>{
         e.preventDefault();
         setError(false);
+        let localFlag = false;
         let todoData = {}
         console.log(newTodo)
         try{
             todoData.title = handleStringValidation(newTodo.title, "Title", 5);
             todoData.description = handleStringValidation(newTodo.description, "Description", 25);
-            todoData.date = handleDateValidation(newTodo.date);
+            todoData.due = handleDateValidation(newTodo.date);
         }
         catch(e){
+            localFlag = true
             setError(true);
             setErrorText(e);
         }
-        addTodo(todoData);
-        setNewTodo({
-            title:'',
-            description: '',
-            date: '',
-        });
+        if(!localFlag){
+            addTodo(todoData);
+            setNewTodo({
+                title:'',
+                description: '',
+                date: '',
+            });
+        }
     }
 
     return (

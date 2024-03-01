@@ -1,10 +1,19 @@
 export const TodoList =({todoList, deletTodo, toggleCompleted})=>{
-   //TODO: color for past due. 
    const passDue =(date)=>{
-        const neDate = new Date(date);
+        const inputDate = new Date(date);
         const currentDate = new Date();
-        if(neDate<currentDate){
+        if(inputDate.getFullYear()<currentDate.getFullYear()){
             return true;
+        }
+        else if(inputDate.getFullYear()==currentDate.getFullYear()){
+            if(inputDate.getMonth()< currentDate.getMonth()){
+                return true;
+            }
+            else if(inputDate.getMonth()==currentDate.getMonth()){
+                if(inputDate.getDate()< currentDate.getDate()){
+                   return true
+                }
+            }
         }
         return false;
    }

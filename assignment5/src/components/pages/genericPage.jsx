@@ -1,10 +1,13 @@
 import axios from "axios";
 import {useEffect, useState } from "react";
 import {useParams, useNavigate, redirect, useLocation} from 'react-router-dom';
+import { Loading } from "../loading.jsx";
+import { NotFound } from "../NotFound.jsx";
 
 export const GenericPage = ({category, ListComponent})=>{
     const [launchData, setLaunchData] = useState(false);
-    const [pageNumber, setPageNumber] = useState(Number(useParams().page)+1);
+    const pageNumber = (Number(useParams().page)+1);
+    const [loading, setLoading] = useState(true);
     const [prevNextPage, setPrevNextPage] = useState({prev: false, next: false});
     const [error, setError] = useState();
     const navigate = useNavigate();
@@ -27,14 +30,18 @@ export const GenericPage = ({category, ListComponent})=>{
                 setPrevNextPage({prev: data.hasPrevPage, next: data.hasNextPage});
                 setLaunchData(data.docs);
             } catch (error) {
-                //TODO: 404;
+                setError(true);
+
             }
+            setLoading(false)
         }
             getLaunches();
     }, [pageNumber, location])
-
+    if(loading){
+        return <Loading/>
+    }
     if(error){
-        return <h2>404</h2>
+        return <NotFound/>
     }
     return <>
         {launchData && 
@@ -45,24 +52,18 @@ export const GenericPage = ({category, ListComponent})=>{
             </div>
         }
         <div>
-            <span>
+            <div className="navigatioButton">
             {prevNextPage.prev && <button onClick={()=>{
                 let prev = pageNumber;
                 let url = `/${category}/page/${prev-2}`;
-                // window.history.pushState({ path: url }, '', url);
-                navigate(url);
-                setPageNumber(pageNumber -1);
-                // redirect(url);
+                navigate(url)
                 }}>prev</button>}
-            {pageNumber}
-            {prevNextPage.next && <button onClick={()=>{
+           {prevNextPage.next&& <button onClick={()=>{
                 let next = pageNumber;
                 let url = `/${category}/page/${next}`;
                 navigate(url);
-                setPageNumber(pageNumber + 1);
-            }}
-                >next</button>}
-            </span>
+            }}>next</button>}
+            </div>
         </div>
       
     </>

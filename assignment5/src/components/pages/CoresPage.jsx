@@ -3,9 +3,17 @@ import {useNavigate} from 'react-router-dom';
 
 const CoresList = ({data})=>{
     const navigate= useNavigate();
-    return <article onClick={()=>{navigate(`/cores/${data.id}`)}} className="card">
-        <h3>{data.serial}</h3>
-    </article>
+    return <div onClick={()=>{navigate(`/cores/${data.id}`)}} className="card">
+         <div className="payloadCardData">
+          <div className="payloadCradName">
+              <span>{data.serial}</span>
+              <hr></hr>
+          </div>
+          <div className="playloadCardChildData">
+              <span>Status: {String(data.status)} </span>
+          </div>
+      </div>
+    </div>
 }
 export const CoresPage = ()=>{
 

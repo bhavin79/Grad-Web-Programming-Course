@@ -3,9 +3,19 @@ import {useNavigate} from 'react-router-dom';
 
 const PayloadsList = ({data})=>{
   const navigate= useNavigate();
-  return <article onClick={()=>{navigate(`/payloads/${data.id}`)}} className="card">
-      <h3>{data.name}</h3>
-  </article>
+  return <div onClick={()=>{navigate(`/payloads/${data.id}`)}} className="card">
+      <div className="payloadCardData">
+          <div className="payloadCradName">
+              <span>{data.name}</span>
+              <hr></hr>
+          </div>
+          <div className="playloadCardChildData">
+              <span>Type: {data.type} </span>
+              <span>Reused: {String(data.reused)}</span>
+          </div>
+      </div>
+    
+  </div>
 }
 export const PayloadsPage = ()=>{
     return <>

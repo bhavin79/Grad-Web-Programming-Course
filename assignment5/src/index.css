@@ -2,6 +2,7 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
+  font-size: 18px;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -14,8 +15,8 @@
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
+  font-weight: 400x;
+  color: #DEDEDE;
   text-decoration: inherit;
 }
 a:hover {
@@ -24,8 +25,7 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  /* place-items: center; */
+  /* display: flex; */
   min-width: 320px;
   min-height: 100vh;
   box-sizing: border-box;

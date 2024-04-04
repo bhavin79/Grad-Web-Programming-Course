@@ -27,7 +27,7 @@ function App() {
       <Link to='/'>Home</Link>
      
       <div className='nav'>
-        <Link to='/rockets/page/0'  className='links'>Rockets</Link>
+       <Link to='/rockets/page/0'  className='links'>Rockets</Link>
         <Link to='/launchpads/page/0' className='links'>Launch Pads</Link>
           <Link to='/launches/page/0' className='links'>Launches</Link>
           <Link to='/payloads/page/0' className='links' >Payloads</Link>

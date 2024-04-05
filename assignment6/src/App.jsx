@@ -9,24 +9,25 @@ import { NavBar } from './components/NavBar'
 import { RecordCompanies } from './components/recordCompanies/RecordCompanies'
 import { RecordCompany } from './components/recordCompanies/RecordCompany'
 import { Search } from './components/search/Search'
+import { Song } from './components/songs/song'
 
 function App() {
-  const [count, setCount] = useState(0)
   return (
     <>
     <NavBar/>
     <Routes>
-      <Route path='/albums/id' element={<Album/>}/>
+      <Route path='/albums/:id' element={<Album/>}/>
       <Route path='/albums' element={<Albums/>}/>
 
-      <Route path='/artist/id' element={<Artist/>}/>
+      <Route path='/artist/:id' element={<Artist/>}/>
       <Route path='/artists' element={<Artists/>}/>
 
+      <Route path='/companies/:id' element={<RecordCompany/>}/>
       <Route path='/companies' element={<RecordCompanies/>}/>
-      <Route path='/companies/id' element={<RecordCompany/>}/>
 
       <Route path='/search' element={<Search/>}/>  
 
+      <Route path='/songs/:id' element={<Song/>}/>
     </Routes>
     </> 
   )

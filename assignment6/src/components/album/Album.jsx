@@ -19,7 +19,7 @@ export const Album = ()=>{
         let album = data.getAlbumById;
         return <div className="flex justify-center items-center h-screen">
             {data&& <div className="flex flex-col">
-                <p>Aritst Name:<Link to={`/artist/${album.artist.id}`}> {album.artist.name} </Link></p>
+                <p>Aritst Name:<Link to={`/artists/${album.artist.id}`}> {album.artist.name} </Link></p>
                 <p>Album Title:{album.title}</p>
                 <p>Release Date: {album.releaseDate}</p>
                 <p>Record Company: <Link to = {`/companies/${album.recordCompany.id}`}> {album.recordCompany.name} </Link></p>

@@ -11,10 +11,9 @@ export const Albums = ()=>{
     }
     if(error){
         console.log(error);
-        return <h1>Something went wrong</h1>
+        return <h1>{error.message}</h1>
     }
     if(data){
-        console.log(data.albums[0])
         return (
             <div className="grid grid-cols-3 gap-4 mx-36 mt-10">
                 {data.albums && data.albums.map(({title, genre, artist, recordCompany, id})=>{
@@ -29,7 +28,6 @@ export const Albums = ()=>{
                             <button className="border border-black py-0.2 px-1 rounded-md m-1">remove</button>
                         </div>
                     </div>
-
                 })}
             </div>
         

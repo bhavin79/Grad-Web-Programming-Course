@@ -609,6 +609,7 @@ export const resolvers = {
   Song:{
     albumId: async(parent)=>{
         let {albumId} = parent;
+        console.log(albumId);
         const redisClient = await getRedisClient();
             //check if it hits the cache;
             try {

@@ -28,7 +28,6 @@ export const Album = ()=>{
                     Songs: 
                         <ul>
                             {album.songs.map((song)=>{
-                                console.log(song)
                                 return <li> <Link to = {`/songs/${song.id}`}>{song.title}</Link></li>
                             })}
                         </ul>

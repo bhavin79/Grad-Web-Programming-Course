@@ -71,7 +71,7 @@ const validDate = (date, param)=>{
         Number(inputDate.getMonth())+1 != Number(date[0]) ||
         Number(inputDate.getFullYear()) != Number(date[2])){
             throw 'Invalid Date'
-        }
+      }
     
 
     const currentDate = new Date();

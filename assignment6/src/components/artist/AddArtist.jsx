@@ -1,0 +1,127 @@
+import { useMutation } from "@apollo/client"
+import { useForm } from "react-hook-form";
+import React, { useState } from 'react'; 
+import { addArtist } from "./queries";
+export const AddArtist =()=>{
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors }
+      } = useForm();
+    const [addArtistMutation, { data, loading, error }] = useMutation(addArtist);
+
+    const [members, setMembers] = useState([]);
+    const [inputValue, setInputValue] = useState('');
+    const [errorText, setErrorText] = useState('');
+    
+    const handleAddMember = (e) => {
+        if (e.key === 'Enter' && inputValue) {
+          e.preventDefault();
+          const regex = /^[a-zA-Z\s]+$/;
+          if(!regex.test(inputValue.trim())){
+              setErrorText("Members can only have Letters");
+              return;
+          }
+          else{
+              setErrorText("");
+          }
+          setMembers([...members, inputValue.trim()]);
+          setInputValue('');
+        }
+      };
+  
+      const handleDeleteMember = (memberDelete) => {
+          setMembers(members.filter(member => member !== memberDelete));
+      };
+
+      const resetForm =()=>{
+            reset();
+            setMembers([]);
+            setInputValue("");
+            setErrorText("");
+      }
+
+    const handleArtistAdd = (formData)=>{   
+        let formateDate = formData.date;
+        formateDate = formateDate.split("-");
+        formateDate = `${formateDate[1]}/${formateDate[2]}/${formateDate[0]}`;
+        console.log(formateDate);
+
+        if(members.length == 0){
+            setErrorText("Member(s) name required");
+            return;
+        }else{
+            setErrorText("");
+        }   
+
+        addArtistMutation({variables:{name:formData.name, dateFormed:formateDate, members: members}})
+        if(data){
+            resetForm();
+        }
+    }
+
+    
+    return(
+        <div>
+            <form onSubmit={handleSubmit(handleArtistAdd)}>
+                <label htmlFor="name">Name: </label> 
+                <input 
+                    type="text" 
+                    id="name"
+                    className= "border border-gray-300 p-1 rounded" 
+                    placeholder="Add Name"
+                    {...register("name", {
+                        required: "Name is Required"
+                    })}/>
+                      {errors && errors.name && <p className="text-orange-600" >{errors.name.message}</p>}
+                <br></br>
+                <label>Members: </label> 
+                <div>
+                <div className="border border-gray-300 p-2 rounded">
+                    <div className="flex flex-wrap gap-2">
+                    {members.map((member, index) => (
+                        <div key={index} className="flex items-center gap-2 bg-gray-100 rounded px-2 py-1">
+                        <span className="text-blue-800">{member}</span>
+                        <button className="cursor-pointer" onClick={() => handleDeleteMember(member)} >x </button>
+                        </div>
+                    ))}
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={handleAddMember}
+                        className="flex-1 outline-none"
+                        placeholder="Add a member and press enter"
+                    />
+                    </div>
+                </div>
+                <p className="text-orange-600">{errorText}</p>
+             </div>
+             <label htmlFor="date">Date Formed: </label>
+                    <input 
+                    type="date"
+                    {...register("date",{ 
+                        required: "Please Select a date",
+                        validate:{
+                            noFuture: (date)=>{
+                                let inputDate = new Date(date);
+                                let currDate = new Date();
+                                if(inputDate>currDate){
+                                    return "Date cant be in future";
+                                }
+                            }
+                        }
+                    }
+                    )}></input>
+                    {errors && errors.date && <p className="text-orange-600" >{errors.date.message}</p>}
+                <br/>
+                <button className="btn my-2 py-0" type="submit">Add!</button>
+                {error && <p>{error.message}</p>}
+                {data &&<p>Successfully added</p>}
+          </form>
+        </div>
+    )
+
+}
+

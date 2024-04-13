@@ -14,10 +14,6 @@ export const getArtits = gql`
 
 export const getArtist = gql`
 query Query($id: String!) {
-  getSongsByArtistId(artistId: $id) {
-    title
-    id
-  }
   getArtistById(_id: $id) {
     members
     name
@@ -30,3 +26,20 @@ query Query($id: String!) {
     }
   }
 }`;
+
+export const getSongsByArtist =gql`
+query Query($id: String!) {
+  getSongsByArtistId(artistId: $id) {
+    title
+    id
+  }
+}
+`;
+
+export const addArtist = gql`
+mutation Mutation($name: String!, $dateFormed: Date!, $members: [String!]!) {
+  addArtist(name: $name, date_formed: $dateFormed, members: $members) {
+    id
+  }
+}
+`;

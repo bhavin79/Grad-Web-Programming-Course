@@ -141,7 +141,8 @@ export const resolvers = {
             console.log("miss the cache - Single Artist");
 
             id = new ObjectId(id); 
-            const result = await getOne(artists,{_id: id} )
+            const result = await getOne(artists,{_id: id})
+            console.log(result);
             if(!result){
                 throw new GraphQLError("Artist Not found", {
                     extensions: {
@@ -275,9 +276,9 @@ export const resolvers = {
         }
         console.log(`miss the cache- getSongsByArtistId`);
         id = new ObjectId(id); 
-        let result = [];
-        const allAlbums = await getAll(albums, {artistId: id});
-        if(allAlbums.length<1){
+        //If artist Exists:
+        const artistEist = await getOne(artists,{_id: id})
+        if(!artistEist){
             throw new GraphQLError("Artist Not found", {
                 extensions: {
                     code: 'NOT_FOUND',
@@ -285,6 +286,8 @@ export const resolvers = {
             })
         }
 
+        let result = [];
+        const allAlbums = await getAll(albums, {artistId: id});
         for(let i =0; i<allAlbums.length; i++){
             const album = allAlbums[i];
             const {songs: allSong} = album;
@@ -882,7 +885,8 @@ export const resolvers = {
         response.dateFormed = validation.dateFormat(response.dateFormed);
 
         try {
-            await redisClient.SET(`${response.id}`, JSON.stringify(response));
+            await redisClient.DEL("AllArtists");
+            // await redisClient.SET(`${response.id}`, JSON.stringify(response));
         } catch (error) {
             console.log(error);
         }

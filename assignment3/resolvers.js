@@ -883,10 +883,22 @@ export const resolvers = {
         const response = await getOne(artists, {_id: result.insertedId});
         response.id = response._id.toString();
         response.dateFormed = validation.dateFormat(response.dateFormed);
-
+        console.log(response);
         try {
-            await redisClient.DEL("AllArtists");
-            // await redisClient.SET(`${response.id}`, JSON.stringify(response));
+            let cacheArtits = await redisClient.get("AllArtists");
+            if(cacheArtits){
+                console.log("hit the cache- All Artits");
+                let result = JSON.parse(cacheArtits);
+                result.push(response);
+                try {
+                    await redisClient.SET("AllArtists", JSON.stringify(result));
+                    await redisClient.EXPIRE("AllArtists", 3600);
+                } catch (error) {
+                   console.log(error);
+                }
+            }
+           
+            await redisClient.SET(`${response.id}`, JSON.stringify(response));
         } catch (error) {
             console.log(error);
         }
@@ -894,7 +906,6 @@ export const resolvers = {
     },
 
      editArtist: async(_, args)=>{
-        console.log(args);
         let {_id:id, name, date_formed:dateFormed, members} = args;
         let queryObj = {}
         try {
@@ -938,6 +949,7 @@ export const resolvers = {
             }) 
         }
         let {albums:allAlbums} = exist;
+
         //check date for all the valid albums;
         if(dateFormed){
             for(let i = 0; i<allAlbums.length; i++){
@@ -980,7 +992,25 @@ export const resolvers = {
 
         const redisClient = await getRedisClient();
         try {
+            let cacheArtits = await redisClient.get("AllArtists");
+            if(cacheArtits){
+                let result = JSON.parse(cacheArtits);
+                let newAllArtistsCache = result.map((artist)=>{
+                    if(artist.id ==  newArtist.id){
+                        artist.name = newArtist.name;
+                        artist.members = newArtist.members;
+                        artist.dateFormed = newArtist.dateFormed;
+                    }
+                    return artist;
+    
+                });
+                await redisClient.SET("AllArtists", JSON.stringify(newAllArtistsCache));
+                await redisClient.EXPIRE("AllArtists", 3600);
+               
+            }
+
             await redisClient.SET(`${newArtist.id}`, JSON.stringify(newArtist));
+            
         } catch (error) {
             console.log(error);
         }
@@ -1040,7 +1070,16 @@ export const resolvers = {
         artist.id = artist._id.toString();
         artist.dateFormed = validation.dateFormat(artist.dateFormed);
         const redisClient = await getRedisClient();
-        try {
+        try {            let cacheArtits = await redisClient.get("AllArtists");
+        if(cacheArtits){
+            let result = JSON.parse(cacheArtits);
+            let newAllArtistsCache = result.filter((arti)=>arti.id != artist.id);
+                
+            await redisClient.SET("AllArtists", JSON.stringify(newAllArtistsCache));
+            await redisClient.EXPIRE("AllArtists", 3600);
+           
+        }
+            
             await redisClient.DEL(`${artist.id}`);
         } catch (error) {
             console.log(error);
@@ -1343,6 +1382,14 @@ export const resolvers = {
         album.releaseDate = validation.dateFormat(album.releaseDate);
 
         try {
+            let cacheAlbum = await redisClient.get("AllAlbums");
+            if(cacheAlbum){
+                let result = JSON.parse(cacheAlbum);
+                result.push(album);
+                await redisClient.SET("AllAlbums", JSON.stringify(result));
+                await redisClient.EXPIRE("AllAlbums", 3600);
+               
+            }
             await redisClient.SET(`${album.id}`, JSON.stringify(album));
         } catch (error) {
             console.log(error);

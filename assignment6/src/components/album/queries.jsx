@@ -38,3 +38,11 @@ export const getAlbums = gql`
       }
 }
   `;
+
+
+export const addAlbum = gql`
+mutation Mutation($title: String!, $releaseDate: Date!, $genre: MusicGenre!, $artistId: String!, $companyId: String!) {
+  addAlbum(title: $title, releaseDate: $releaseDate, genre: $genre, artistId: $artistId, companyId: $companyId) {
+    id
+  }
+}`;

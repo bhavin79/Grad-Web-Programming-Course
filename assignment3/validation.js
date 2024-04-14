@@ -66,7 +66,6 @@ const validDate = (date, param)=>{
     
     const format = `${date[0]}/${date[1]}/${date[2]}`
     let inputDate = new Date(format)
-
     if(Number(inputDate.getDate()) != Number(date[1]) || 
         Number(inputDate.getMonth())+1 != Number(date[0]) ||
         Number(inputDate.getFullYear()) != Number(date[2])){
@@ -104,7 +103,7 @@ const validArrayOfStrings = (array, parameter = "input") => {
 };
 
 const dateFormat = (date)=>{
-    return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`
+    return `${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}`
 }
 
 const validDuration = (duration)=>{

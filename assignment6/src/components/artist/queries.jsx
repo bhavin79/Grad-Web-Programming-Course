@@ -7,6 +7,7 @@ export const getArtits = gql`
             name
             members
             numOfAlbums
+            dateFormed
         }
     }
 `;
@@ -43,3 +44,19 @@ mutation Mutation($name: String!, $dateFormed: Date!, $members: [String!]!) {
   }
 }
 `;
+
+export const updateArtist = gql`
+mutation Mutation($id: String!, $name: String, $dateFormed: Date, $members: [String!]) {
+  editArtist(_id: $id, name: $name, date_formed: $dateFormed, members: $members) {
+    id
+  }
+}
+`;
+
+
+export const deleteArtist = gql`
+mutation Mutation($id: String!) {
+  removeArtist(_id: $id) {
+    id
+  }
+}`;

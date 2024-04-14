@@ -1,20 +1,14 @@
 import { useMutation } from "@apollo/client"
 import { useForm } from "react-hook-form";
 import React, { useState } from 'react'; 
-import { addArtist } from "./queries";
-export const AddArtist =()=>{
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors }
-      } = useForm();
-    const [addArtistMutation, { data, loading, error }] = useMutation(addArtist);
+import { updateArtist } from "./queries";
 
-    const [members, setMembers] = useState([]);
+export const EditArtist =(props)=>{
+    const [members, setMembers] = useState(props.data.members);
     const [inputValue, setInputValue] = useState('');
+    const [editArtistMutation, { data, loading, error }] = useMutation(updateArtist);
     const [errorText, setErrorText] = useState('');
-    
+
     const handleAddMember = (e) => {
         if (e.key === 'Enter' && inputValue) {
           e.preventDefault();
@@ -35,17 +29,14 @@ export const AddArtist =()=>{
           setMembers(members.filter(member => member !== memberDelete));
       };
 
-     const resetForm =(e)=>{
-            if(e){
-                e.preventDefault();
-            }
-            reset();
-            setMembers([]);
-            setInputValue("");
-            setErrorText("");
-      }
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors }
+      } = useForm();
 
-    const handleArtistAdd = (formData)=>{   
+    const handleArtistEdit=(formData)=>{
         let formateDate = formData.date;
         formateDate = formateDate.split("-");
         formateDate = `${formateDate[1]}/${formateDate[2]}/${formateDate[0]}`;
@@ -57,35 +48,35 @@ export const AddArtist =()=>{
         }else{
             setErrorText("");
         }   
+
+        editArtistMutation({variables:{name:formData.name, dateFormed:formateDate, members: members, id:props.data.id}})
+
         
-        addArtistMutation({variables:{name:formData.name, dateFormed:formateDate, members: members}})
-        resetForm();
     }
 
-
-    return(
+    const resetForm =(e)=>{
+        if(e){
+            e.preventDefault();
+        }
+        reset();
+        setMembers(props.data.members);
+        setInputValue("");
+    }
+      return (
         <div>
-            <form onSubmit={handleSubmit(handleArtistAdd)}>
+          <form onSubmit={handleSubmit(handleArtistEdit)}>
                 <label htmlFor="name">Name: </label> 
                 <input 
                     type="text" 
                     id="name"
                     className= "border border-gray-300 p-1 rounded" 
+                    defaultValue={props.data.name}
                     placeholder="Add Name"
                     {...register("name", {
-                        required: "Name is Required",
-                        validate:{
-                            justSpaces: (name)=>{
-                                    if(name.trim().length==0){
-                                        return "Name can't be empty spaces";
-                                }
-                            }
-                        }
+                        required: "Name is Required"
                     })}/>
                       {errors && errors.name && <p className="text-orange-600" >{errors.name.message}</p>}
                 <br></br>
-                <label>Members: </label> 
-                <div>
                 <div className="border border-gray-300 p-2 rounded">
                     <div className="flex flex-wrap gap-2">
                     {members.map((member, index) => (
@@ -105,10 +96,11 @@ export const AddArtist =()=>{
                     </div>
                 </div>
                 <p className="text-orange-600">{errorText}</p>
-             </div>
+
              <label htmlFor="date">Date Formed: </label>
                     <input 
                     type="date"
+                    defaultValue={new Date(props.data.dateFormed).toISOString().split('T')[0]}
                     {...register("date",{ 
                         required: "Please Select a date",
                         validate:{
@@ -124,14 +116,13 @@ export const AddArtist =()=>{
                     )}></input>
                     {errors && errors.date && <p className="text-orange-600" >{errors.date.message}</p>}
                 <br/>
-                <button className="btn my-2 py-0" type="submit">Add!</button>
-                <button className="btn my-2 py-0" type="submit" onClick={resetForm}>Clear!</button>
+                <button className="btn my-2 py-0" type="submit">Edit!</button>
+                <button className="btn my-2 py-0" type="submit" onClick={resetForm}>Clear Changes!</button>
 
                 {error && <p>{error.message}</p>}
-                {data &&<p>Successfully added</p>}
+                {data &&<p>Successfully Edited. Refresh the page to see edits</p>}
           </form>
         </div>
-    )
+      );
 
 }
-

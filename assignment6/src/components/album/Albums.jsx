@@ -1,6 +1,9 @@
 import { useQuery } from "@apollo/client"
 import { Link } from "react-router-dom";
 import { getAlbums } from "./queries"
+import {MyModal} from "../common/modal"
+import { AddAlbumForm } from "./AddAlbumForm";
+
 export const Albums = ()=>{
     const {loading, data, error} = useQuery(getAlbums, {
         fetchPolicy: 'cache-and-network'
@@ -13,8 +16,11 @@ export const Albums = ()=>{
         console.log(error);
         return <h1>{error.message}</h1>
     }
+    
     if(data){
         return (
+            <div>
+            <MyModal CustomForm={AddAlbumForm} buttonName="Add" modalName="addAlbum-Modal"/>
             <div className="grid grid-cols-3 gap-4 mx-36 mt-10">
                 {data.albums && data.albums.map(({title, genre, artist, recordCompany, id})=>{
                     return <div className="flex flex-col flex-wrap border border-black rounded-md pl-2">
@@ -30,8 +36,8 @@ export const Albums = ()=>{
                     </div>
                 })}
             </div>
-        
-            );
+            </div>
+        );
     }
 
    

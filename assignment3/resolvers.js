@@ -1095,7 +1095,7 @@ export const resolvers = {
 
         try {
             name = validation.validString(name, "name");
-            if(!regex.test(name)) throw `Name should have only letters`;
+            // if(!regex.test(name)) throw `Name should have only letters`;
             founded_year = validation.validNumber(founded_year, "found year", 1900, 2024);
             country = validation.validString(country, "country");
         } catch (error) {
@@ -1133,6 +1133,18 @@ export const resolvers = {
         response.id = response._id.toString();
 
         try {
+            let cacheCompany = await redisClient.get("AllRecordCompanies");
+            if(cacheCompany){
+                let result = JSON.parse(cacheCompany);
+                result.push(response);
+                try {
+                    await redisClient.SET("AllRecordCompanies", JSON.stringify(result));
+                    await redisClient.EXPIRE("AllRecordCompanies", 3600);
+                } catch (error) {
+                   console.log(error);
+                }
+            }
+
             await redisClient.SET(`${response.id}`, JSON.stringify(response));
         } catch (error) {
             console.log(error);
@@ -1210,6 +1222,20 @@ export const resolvers = {
         newCompany.id = newCompany._id.toString();
         const redisClient = await getRedisClient();
         try {
+            let cacheCompany = await redisClient.get("AllRecordCompanies");
+            if(cacheCompany){
+                let result = JSON.parse(cacheCompany);
+                let newCacheComapnies = result.map((comp)=>{
+                    if(comp.id == newCompany.id ){
+                        comp.country = newCompany.country;
+                        comp.foundedYear = newCompany.foundedYear;
+                        comp.name = newCompany.name;
+                    }
+                    return comp;
+                });
+                    await redisClient.SET("AllRecordCompanies", JSON.stringify(newCacheComapnies));
+                    await redisClient.EXPIRE("AllRecordCompanies", 3600);
+            }
             await redisClient.SET(`${newCompany.id}`, JSON.stringify(newCompany));
         } catch (error) {
             console.log(error);
@@ -1261,6 +1287,16 @@ export const resolvers = {
         recordCompanyExist.id = recordCompanyExist._id.toString();
         const redisClient = await getRedisClient();
         try {
+            let cacheCompany = await redisClient.get("AllRecordCompanies");
+            if(cacheCompany){
+                let result = JSON.parse(cacheCompany);
+                let newCacheComapnies = result.filter((rc)=>rc.id != recordCompanyExist.id);
+
+                await redisClient.SET("AllRecordCompanies", JSON.stringify(newCacheComapnies));
+                await redisClient.EXPIRE("AllRecordCompanies", 3600);
+                
+            }
+
             await redisClient.DEL(`${recordCompanyExist.id}`);
         } catch (error) {
             console.log(error);

@@ -7,6 +7,7 @@ export const getAllCompanies = gql`
       name
       numOfAlbums
       country
+      foundedYear
     }
   }`;
 
@@ -26,4 +27,25 @@ query Query($id: String!){
   }
 
 
+}`;
+
+export const addCompany = gql`
+ mutation AddCompany($name: String!, $foundedYear: Int!, $country: String!) {
+    addCompany(name: $name, founded_year: $foundedYear, country: $country) {
+      id
+    }
+}`;
+
+export const editCompany = gql`
+  mutation EditCompany($id: String!, $name: String, $foundedYear: Int, $country: String) {
+    editCompany(_id: $id, name: $name, founded_year: $foundedYear, country: $country) {
+      id
+    }
+}`;
+
+export const removeCompany = gql`
+  mutation RemoveCompany($id: String!) {
+    removeCompany(_id: $id) {
+      id
+    }
 }`;

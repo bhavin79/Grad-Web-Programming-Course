@@ -1,12 +1,12 @@
 import { useMutation } from "@apollo/client"
 import { useForm } from "react-hook-form";
 import React, { useState } from 'react'; 
-import { updateArtist } from "./queries";
+import { updateArtist, getArtits } from "./queries";
 
 export const EditArtist =(props)=>{
     const [members, setMembers] = useState(props.data.members);
     const [inputValue, setInputValue] = useState('');
-    const [editArtistMutation, { data, loading, error }] = useMutation(updateArtist);
+    const [editArtistMutation, { data, loading, error }] = useMutation(updateArtist, {refetchQueries:[getArtits]});
     const [errorText, setErrorText] = useState('');
 
     const handleAddMember = (e) => {

@@ -33,6 +33,7 @@ query Query($id: String!) {
   getSongsByArtistId(artistId: $id) {
     title
     id
+    duration
   }
 }
 `;

@@ -1,11 +1,12 @@
 import { useMutation } from "@apollo/client";
-import { deleteArtist, getArtits } from "./queries";
+import { getAlbumById } from "../album/queries";
+import { deleteSong } from "./queries";
 
-export const DeleteArtistForm =(props)=>{
-    const [deleteArtistMutation, { data, loading, error }] = useMutation(deleteArtist, {refetchQueries:[getArtits]});
+export const DeleteSongForm =(props)=>{
+    const [deleteSongMutation, { data, loading, error }] = useMutation(deleteSong, {refetchQueries:[getAlbumById]});
     
     const handleDelete = ()=>{
-        deleteArtistMutation({variables:{id: props.data.id}});
+        deleteSongMutation({variables:{id: props.data.id}});
     }
 
     return (<div>

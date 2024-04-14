@@ -45,7 +45,8 @@ export const Artist = ()=>{
                     Songs: 
                         <ul>
                             {songs.map((song)=>{
-                                return <li> <Link to = {`/songs/${song.id}`}>{song.title}</Link></li>
+                                return <li> <Link to = {`/songs/${song.id}`}>{song.title}</Link> - ({song.duration})</li>
+
                             })}
                         </ul>
                     </div>}

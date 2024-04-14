@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client"
 import { useForm } from "react-hook-form";
 import React, { useState } from 'react'; 
-import { addAlbum } from "./queries";
+import { addAlbum, getAlbums } from "./queries";
 
 const getGenre =(genre)=>{
     const MusicGenre =  {
@@ -69,11 +69,11 @@ export const AddAlbumForm =()=>{
         reset,
         formState: { errors }
       } = useForm();
-    const [addAlbumMutation, { data, loading, error }] = useMutation(addAlbum);
+    const [addAlbumMutation, { data, loading, error }] = useMutation(addAlbum, {refetchQueries:[getAlbums]});
     const [selectedGenre, setSelectedGenre]= useState("");
     const [errorText, setErrorText] = useState('');
 
-// title: $title, releaseDate: $releaseDate, genre: $genre, artistId: $artistId, companyId: $companyId
+    // title: $title, releaseDate: $releaseDate, genre: $genre, artistId: $artistId, companyId: $companyId
     //TODO: Validation in Add Artist;
     const [genre] = useState([ "", "POP", "ROCK", "HIP_HOP", "COUNTRY", "JAZZ" , "CLASSICAL", "ELECTRONIC", "R_AND_B", "INDIE", "ALTERNATIVE",]) 
      const resetForm =(e)=>{

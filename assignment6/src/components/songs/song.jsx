@@ -1,5 +1,8 @@
 import { useQuery } from "@apollo/client"
 import { useParams, Link } from "react-router-dom";
+import { MyModal } from "../common/modal";
+import { DeleteSongForm } from "./DeleteSongForm";
+import { EditSongForm } from "./EditSong";
 import { getSong } from "./queries"
 
 export const Song = ()=>{
@@ -12,7 +15,7 @@ export const Song = ()=>{
     }
     if(error){
         console.log(error);
-        return <h1>Something went wrong</h1>
+        return <h1>{error.message}</h1>
     }
     if(data){
         const {getSongById:song} = data;
@@ -23,6 +26,10 @@ export const Song = ()=>{
              <p>Album: <Link to= {`/albums/${song.albumId.id}`}>{song.albumId.title}</Link></p>
              <p>Artist: <Link to= {`/artists/${song.albumId.artist.id}`}>{song.albumId.artist.name}</Link></p>
              <p>Duration: {song.duration}</p>
+             
+             <MyModal CustomForm={EditSongForm} modalName={`${song.id}-edit`} buttonName="Edit" data={{id:song.id, albumId: song.albumId.id, duration: song.duration, title: song.title}}/>
+             <MyModal CustomForm={DeleteSongForm} modalName={`${song.id}-del`} buttonName="Remove" data={{id:song.id, name: song.title}}/>
+   
                 </div>}
         </div>
     }

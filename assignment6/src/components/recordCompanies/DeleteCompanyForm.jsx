@@ -1,8 +1,8 @@
 import { useMutation } from "@apollo/client";
-import { removeCompany } from "./queries";
+import { removeCompany, getAllCompanies } from "./queries";
 
 export const DeleteCompanyForm =(props)=>{
-    const [deleteCompMutation, { data, loading, error }] = useMutation(removeCompany);
+    const [deleteCompMutation, { data, loading, error }] = useMutation(removeCompany, {refetchQueries:[getAllCompanies]});
     
     const handleDelete = ()=>{
         deleteCompMutation({variables:{id: props.data.id}});

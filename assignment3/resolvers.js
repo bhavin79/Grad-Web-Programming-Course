@@ -618,13 +618,14 @@ export const resolvers = {
             try {
                 let cache = await redisClient.get(`${albumId.toString()}`);
                 if(cache){
-                    console.log("hit the cache - Single Artist");
+                    console.log("hit the cache - Single Album with parent Song");
                     let result = JSON.parse(cache);
                     return result
                 }
             } catch (error) {
                 console.log(error);
             }
+        console.log("miss the cache - Single Album with parent Song"); 
         let result = await getOne(albums, {_id: new ObjectId(albumId)});
         result.id = result._id.toString();
         result.releaseDate = validation.dateFormat(result.releaseDate);
@@ -1580,7 +1581,6 @@ export const resolvers = {
     addSong: async(_, args)=>{
         let {title, duration, albumId}= args;
         const regex = /^[a-zA-Z\s]+$/;
-           
         console.log(args);
         //Validaiton;
         try {
@@ -1648,6 +1648,14 @@ export const resolvers = {
         result.id = result._id.toString();
         const redisClient = await getRedisClient();
         try {
+            let songCache = await redisClient.GET(`AlbumSongs:${albumId}`);
+            if(songCache){
+                let songCacheJson = JSON.parse(songCache);
+                songCacheJson.push(result);
+
+                await redisClient.SET(`AlbumSongs:${albumId}`, JSON.stringify(songCacheJson));
+                await redisClient.EXPIRE(`AlbumSongs:${albumId}`, 3600);
+            }
             await redisClient.SET(`${result.id}`, JSON.stringify(result));
         } catch (error) {
             console.log(error);
@@ -1807,6 +1815,15 @@ export const resolvers = {
         songExist.id = songExist._id.toString();
         const redisClient = await getRedisClient();
         try {
+            let cacheSongs = await redisClient.get(`AlbumSongs:${songExist.albumId.toString()}`);
+
+            if(cacheSongs){
+                let result = JSON.parse(cacheSongs);
+                let newAllSongsCache = result.filter((song)=>song.id != songExist.id);
+                console.log("New Cache",newAllSongsCache);
+                await redisClient.SET(`AlbumSongs:${songExist.albumId.toString()}`, JSON.stringify(newAllSongsCache));
+                await redisClient.EXPIRE(`AlbumSongs:${songExist.albumId.toString()}`, 3600);
+            }
             await redisClient.DEL(`${songExist.id}`);
         } catch (error) {
             console.log(error);

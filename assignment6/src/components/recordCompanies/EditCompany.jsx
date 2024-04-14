@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client"
 import { useForm } from "react-hook-form";
 import React, { useState } from 'react'; 
-import { editCompany } from "./queries";
+import { editCompany, getAllCompanies } from "./queries";
 
 export const EditCompanyForm =({data:dataDefault})=>{
     const {
@@ -10,7 +10,7 @@ export const EditCompanyForm =({data:dataDefault})=>{
         reset,
         formState: { errors }
       } = useForm();
-    const [editCompanyMutation, { data, loading, error }] = useMutation(editCompany);
+    const [editCompanyMutation, { data, loading, error }] = useMutation(editCompany, {refetchQueries:[getAllCompanies]});
 
      const resetForm =(e)=>{
             if(e){

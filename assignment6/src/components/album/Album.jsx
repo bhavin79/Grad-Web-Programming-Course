@@ -1,6 +1,10 @@
 import { useQuery } from "@apollo/client"
 import { useParams, Link } from "react-router-dom";
 import { getAlbumById } from "./queries"
+import {MyModal} from "../common/modal"
+import { AddSongForm } from "../songs/AddSongForm";
+import { EditSongForm } from "../songs/EditSong";
+import { DeleteSongForm } from "../songs/DeleteSongForm";
 
 export const Album = ()=>{
     const {loading, data, error} = useQuery(getAlbumById, {
@@ -14,10 +18,13 @@ export const Album = ()=>{
         console.log(error);
         return <h1>Something went wrong</h1>
     }
+    
     if(data){
         console.log(data);
         let album = data.getAlbumById;
-        return <div className="flex justify-center items-center h-screen">
+        return <div> 
+            <MyModal CustomForm={AddSongForm} buttonName="Add new song!" modalName="addSong-modal"/>
+            <div className="flex justify-center items-center h-screen">
             {data&& <div className="flex flex-col">
                 <p>Aritst Name:<Link to={`/artists/${album.artist.id}`}> {album.artist.name} </Link></p>
                 <p>Album Title:{album.title}</p>
@@ -28,11 +35,17 @@ export const Album = ()=>{
                     Songs: 
                         <ul>
                             {album.songs.map((song)=>{
-                                return <li> <Link to = {`/songs/${song.id}`}>{song.title}</Link></li>
+                                return <div>
+                                    <li> <Link to = {`/songs/${song.id}`}>{song.title}</Link></li>
+                                    <MyModal CustomForm={DeleteSongForm} modalName={`${song.id}-del`} buttonName="Remove" data={{id: song.id, name: song.title}} />
+                                </div>
+                                
                             })}
                         </ul>
                     </div>
                 </div>}
         </div>
+        </div>
+
     }
 }

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { getAlbums } from "./queries"
 import {MyModal} from "../common/modal"
 import { AddAlbumForm } from "./AddAlbumForm";
+import { EditAlbumForm } from "./EditAlbumForm";
+import { DeleteAlbumForm } from "./DeleteAlbumForm";
 
 export const Albums = ()=>{
     const {loading, data, error} = useQuery(getAlbums, {
@@ -22,7 +24,7 @@ export const Albums = ()=>{
             <div>
             <MyModal CustomForm={AddAlbumForm} buttonName="Add" modalName="addAlbum-Modal"/>
             <div className="grid grid-cols-3 gap-4 mx-36 mt-10">
-                {data.albums && data.albums.map(({title, genre, artist, recordCompany, id})=>{
+                {data.albums && data.albums.map(({title, genre, artist, recordCompany, id, releaseDate})=>{
                     return <div className="flex flex-col flex-wrap border border-black rounded-md pl-2">
                         <Link to={`/albums/${id}`}> title: {title}</Link>
                         <span>genre: {genre}</span>
@@ -30,8 +32,8 @@ export const Albums = ()=>{
                         <span>record company: {recordCompany.name}</span>
 
                         <div className="flex flex-row justify-around">
-                            <button className="border border-black py-0.2 px-1 rounded-md m-1">edit</button>
-                            <button className="border border-black py-0.2 px-1 rounded-md m-1">remove</button>
+                        <MyModal CustomForm={EditAlbumForm} buttonName="Edit" data={{title, genre, artist, recordCompany, id, releaseDate }} modalName={`${id}-edit`}/>
+                        <MyModal CustomForm={DeleteAlbumForm} buttonName="Remove" data={{title, artist,  id }} modalName={`${id}-del`}/>
                         </div>
                     </div>
                 })}

@@ -112,7 +112,6 @@ type Mutation {
       title: String, 
       releaseDate: Date, 
       genre: MusicGenre, 
-      songs: [String!], 
       artistId: String, 
       companyId: String
       ):Album,

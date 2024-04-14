@@ -1070,15 +1070,16 @@ export const resolvers = {
         artist.id = artist._id.toString();
         artist.dateFormed = validation.dateFormat(artist.dateFormed);
         const redisClient = await getRedisClient();
-        try {            let cacheArtits = await redisClient.get("AllArtists");
-        if(cacheArtits){
-            let result = JSON.parse(cacheArtits);
-            let newAllArtistsCache = result.filter((arti)=>arti.id != artist.id);
+        try {            
+        
+            let cacheArtits = await redisClient.get("AllArtists");
+            if(cacheArtits){
+                let result = JSON.parse(cacheArtits);
+                let newAllArtistsCache = result.filter((arti)=>arti.id != artist.id);
                 
-            await redisClient.SET("AllArtists", JSON.stringify(newAllArtistsCache));
-            await redisClient.EXPIRE("AllArtists", 3600);
-           
-        }
+                await redisClient.SET("AllArtists", JSON.stringify(newAllArtistsCache));
+                await redisClient.EXPIRE("AllArtists", 3600);
+            }
             
             await redisClient.DEL(`${artist.id}`);
         } catch (error) {
@@ -1294,33 +1295,7 @@ export const resolvers = {
                  },
             }) 
         }
-        //Check dates
-        if(releaseDate.getFullYear()<artistExist.dateFormed.getFullYear()){
-            throw new GraphQLError("Release date cannot precede the artist's formation date", {
-                extensions: {
-                  code: 'BAD_USER_INPUT',
-                 },
-            }) 
-        }
-        else if(releaseDate.getFullYear()==artistExist.dateFormed.getFullYear()){
-            if(releaseDate.getMonth()<artistExist.dateFormed.getMonth()){
-                throw new GraphQLError("Release date cannot precede the artist's formation date", {
-                    extensions: {
-                      code: 'BAD_USER_INPUT',
-                     },
-                }) 
-            }
-            else if(releaseDate.getMonth()==artistExist.dateFormed.getMonth()){
-                if(releaseDate.getDate()<artistExist.dateFormed.getDate()){
-                    throw new GraphQLError("Release date cannot precede the artist's formation date", {
-                        extensions: {
-                          code: 'BAD_USER_INPUT',
-                         },
-                    }) 
-                }
-            }
-        }
-
+       
         //if record company id is valid;
         let recordCompanyExist = await getOne(recordcompanies, {_id: new ObjectId(recordCompanyId)});
         if(!recordCompanyExist){
@@ -1331,14 +1306,6 @@ export const resolvers = {
             }) 
         }
 
-        //Check dates
-        if(releaseDate.getFullYear()<recordCompanyExist.foundedYear){
-            throw new GraphQLError("Release date cannot precede the Record comapany's formation date", {
-                extensions: {
-                  code: 'BAD_USER_INPUT',
-                 },
-            }) 
-        }
 
         // check if same album exists with same artist ID;
         let allAlbumByArtist = await getAll(albums, {artistId: new ObjectId(artistId)});
@@ -1440,6 +1407,7 @@ export const resolvers = {
             }) 
         }
        
+        //TODO: Check dates.
 
         //if artist exists;
         const albumExist = await getOne(albums, {_id: new ObjectId(id)});
@@ -1455,7 +1423,7 @@ export const resolvers = {
 
         if(artistId){
             artistExist = await getOne(artists, {_id: new ObjectId(artistId)});
-            if(albumExist == null){
+            if(artistExist == null){
                 throw new GraphQLError("Artist not found", {
                     extensions: {
                       code: 'NOT_FOUND',
@@ -1478,6 +1446,7 @@ export const resolvers = {
             }
         }
           
+
         if(artistExist != null){
             //Remove album id from old artist
             let removeAlbumFromOldArtist = await findOneAndUpdate(artists, {_id:albumExist.artistId}, {$pull: {albums: new ObjectId(albumExist._id)}})
@@ -1501,6 +1470,24 @@ export const resolvers = {
 
         const redisClient = await getRedisClient();
         try {
+            let cacheAlbums = await redisClient.get("AllAlbums");
+            if(cacheAlbums){
+                let result = JSON.parse(cacheAlbums);
+                let newAllAlbumsCache = result.map((album)=>{
+                    if(album.id ==  newAlbum.id){
+                        album.title = newAlbum.title;
+                        album.releaseDate = newAlbum.releaseDate;
+                        album.genre = newAlbum.genre;
+                        album.artistId = newAlbum.artistId;
+                        album.recordCompanyId = newAlbum.recordCompanyId;
+                    }
+                    return album;
+    
+                });
+                await redisClient.SET("AllAlbums", JSON.stringify(newAllAlbumsCache));
+                await redisClient.EXPIRE("AllAlbums", 3600);
+               
+            }
             await redisClient.SET(`${newAlbum.id}`, JSON.stringify(newAlbum));
         } catch (error) {
             console.log(error);
@@ -1535,8 +1522,19 @@ export const resolvers = {
         albumExist.id = albumExist._id.toString();
 
         const redisClient = await getRedisClient();
+        //AllAlbums
         try {
+            let cacheAlbum = await redisClient.get("AllAlbums");
+            if(cacheAlbum){
+                let result = JSON.parse(cacheAlbum);
+                let newAllAlbumsCache = result.filter((alb)=>alb.id != albumExist.id);
+                
+                await redisClient.SET("AllAlbums", JSON.stringify(newAllAlbumsCache));
+                await redisClient.EXPIRE("AllAlbums", 3600);
+            }
+
             await redisClient.DEL(`${albumExist.id}`);
+
         } catch (error) {
             console.log(error);
         }

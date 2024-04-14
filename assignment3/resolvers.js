@@ -1656,6 +1656,15 @@ export const resolvers = {
                 await redisClient.SET(`AlbumSongs:${albumId}`, JSON.stringify(songCacheJson));
                 await redisClient.EXPIRE(`AlbumSongs:${albumId}`, 3600);
             }
+
+            let songCache2 = await redisClient.GET(`getSongsByAlbumId:${albumId}`);
+            if(songCache2){
+                let songCacheJson = JSON.parse(songCache2);
+                songCacheJson.push(result);
+                await redisClient.SET(`getSongsByAlbumId:${albumId}`, JSON.stringify(songCacheJson));
+                await redisClient.EXPIRE(`getSongsByAlbumId:${albumId}`, 3600);
+            }
+
             await redisClient.SET(`${result.id}`, JSON.stringify(result));
         } catch (error) {
             console.log(error);
@@ -1816,14 +1825,23 @@ export const resolvers = {
         const redisClient = await getRedisClient();
         try {
             let cacheSongs = await redisClient.get(`AlbumSongs:${songExist.albumId.toString()}`);
-
             if(cacheSongs){
                 let result = JSON.parse(cacheSongs);
                 let newAllSongsCache = result.filter((song)=>song.id != songExist.id);
-                console.log("New Cache",newAllSongsCache);
                 await redisClient.SET(`AlbumSongs:${songExist.albumId.toString()}`, JSON.stringify(newAllSongsCache));
                 await redisClient.EXPIRE(`AlbumSongs:${songExist.albumId.toString()}`, 3600);
             }
+            let cacheSongs2 = await redisClient.get(`getSongsByAlbumId:${songExist.albumId.toString()}`);
+            //getSongsByAlbumId:${id}
+            if(cacheSongs2){
+                let result = JSON.parse(cacheSongs2);
+                console.log(result);
+                let newAllSongsCache = result.filter((song)=>song.id != songExist.id);
+                console.log("New Cache",newAllSongsCache);
+                await redisClient.SET(`getSongsByAlbumId:${songExist.albumId.toString()}`, JSON.stringify(newAllSongsCache));
+                await redisClient.EXPIRE(`getSongsByAlbumId:${songExist.albumId.toString()}`, 3600);
+            }
+
             await redisClient.DEL(`${songExist.id}`);
         } catch (error) {
             console.log(error);

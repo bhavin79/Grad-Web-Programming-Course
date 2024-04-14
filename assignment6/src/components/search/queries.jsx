@@ -37,3 +37,18 @@ export const getCompanies = gql`query CompanyByFoundedYear($min: Int!, $max: Int
     id
   }
 }`;
+
+export const getSongsByTitle = gql`query SearchSongByTitle($searchTitleTerm: String!) {
+  searchSongByTitle(searchTitleTerm: $searchTitleTerm) {
+    id
+    title
+    albumId {
+      id
+      title
+      artist {
+        name
+        id
+      }
+    }
+  }
+}`;

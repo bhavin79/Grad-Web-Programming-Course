@@ -22,10 +22,6 @@ export const getAlbums = gql`
    query getALbum($id: String!) {
       getAlbumById(_id: $id) {
         id
-        songs {
-          id
-          title
-        }
         releaseDate
         title
         artist {
@@ -40,6 +36,14 @@ export const getAlbums = gql`
       }
 }
   `;
+
+export const getSongByAlbumId = gql`query GetSongsByAlbumId($id: String!) {
+  getSongsByAlbumId(_id: $id) {
+    id
+    title
+    duration
+  }
+}`;
 
 
 export const addAlbum = gql`

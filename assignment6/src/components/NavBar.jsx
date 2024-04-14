@@ -8,7 +8,6 @@ export const NavBar = ()=>{
             <p><Link to="/albums" className="hover:text-blue-300">Albums</Link></p>
             <p><Link to="/companies" className="hover:text-blue-300">Record Companies</Link></p>
             <p><Link to="/search" className="hover:text-blue-300">Search</Link></p>
-
         </div>
     )
 }

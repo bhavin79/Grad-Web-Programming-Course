@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import React, { useState } from 'react'; 
 import { addSong } from "./queries";
 import { useParams } from "react-router-dom";
-import { getAlbumById } from "../album/queries";
+import { getAlbumById, getSongByAlbumId } from "../album/queries";
 
 
 export const AddSongForm =()=>{
@@ -14,7 +14,7 @@ export const AddSongForm =()=>{
         reset,
         formState: { errors }
       } = useForm();
-    const [addSongMutation, { data, loading, error }] = useMutation(addSong, {refetchQueries:[getAlbumById]});
+    const [addSongMutation, { data, loading, error }] = useMutation(addSong, {refetchQueries:[getAlbumById,getSongByAlbumId]});
     const [errorText, setErrorText] = useState('');
     const {id:AlbumId} = useParams();
     const resetForm =(e)=>{
@@ -25,10 +25,10 @@ export const AddSongForm =()=>{
       }
 
     const handleSongAdd = (formData)=>{   
-
         const {title, duration } = formData;
         addSongMutation({variables:{title: title, duration:duration ,albumId: AlbumId}})
         resetForm();
+
     }
 
     return(

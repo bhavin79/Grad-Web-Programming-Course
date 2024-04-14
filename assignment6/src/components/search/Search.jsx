@@ -1,18 +1,12 @@
 import { useState } from "react";
-import { useLazyQuery } from "@apollo/client"
-import { getArtistByName, getAlbumsByGenre } from "./queries";
 import { ArtistForm } from "./ArtistsForm";
 import { CompaniesForm } from "./CompanyForm";
 import { GenreForm } from "./GenreForm";
+import { SongSearchForm } from "./SongSearchForm";
 
 export const Search = ()=>{
-    const [selectedOption, setSelectedOption] = useState({Genre:true, CompanyFoundYear: false, Artist:false});
-    const [artist, setArtist] = useState("");
-    const [genre, setGenre] = useState("");
-
-    const [getArtist, {data:artistData, loading:artistLoading, error:artistError}]= useLazyQuery(getArtistByName,{fetchPolicy: 'cache-and-network'})
-    const [getAlbums, {data:albumData, loading:albumLoading, error:albumError}]= useLazyQuery(getAlbumsByGenre,{fetchPolicy: 'cache-and-network'})
-
+    const [selectedOption, setSelectedOption] = useState({Genre:true, CompanyFoundYear: false, Artist:false, Song:false});
+    
     const getTabStyle =(name)=>{
         switch(name){
             case "Genre":{
@@ -33,6 +27,12 @@ export const Search = ()=>{
                 }
                 break;
             }
+            case "Song":{
+                if(selectedOption.Song){
+                    return `tab-active`
+                }
+                break;
+            }
         }
     }
 
@@ -42,7 +42,8 @@ export const Search = ()=>{
         const newSelectState = {
             Genre:false, 
             CompanyFoundYear: false, 
-            Artist:false
+            Artist:false,
+            Song:false,
         }
         console.log(val)
         setSelectedOption({
@@ -51,23 +52,15 @@ export const Search = ()=>{
         })        
     }
 
-    const handleSearch = ()=>{
-        if(selectedOption.Artist){
-            getArtist({variables:{searchTerm: artist}})
-        }
-        if(selectedOption.Genre){
-            //TODO: Make it dynamic
-            getAlbums({variables:{genre: MusicGenre.INDIE}})
-        }
-    }
 
     console.log(selectedOption);
-
+    const tabsList = ["Genre", "CompanyFoundYear", "Artist", "Song"]
     return <div className="flex flex-col items-center h-screen">
         <div role="tablist" className="tabs tabs-lifted">
-            <a role="tab" className={`tab ${getTabStyle("Genre")}`} name='Genre' onClick={handleSearchDropDown}>Genre</a>
-            <a role="tab" className={`tab ${getTabStyle("CompanyFoundYear")}`} name='CompanyFoundYear' onClick={handleSearchDropDown}>Company Found year</a>
-            <a role="tab" className={`tab ${getTabStyle("Artist")}`} name='Artist' onClick={handleSearchDropDown} >Artist</a>
+            {tabsList.map((tabVal)=>{
+                 return  <a role="tab" className={`tab ${getTabStyle(tabVal)}`} name={tabVal} onClick={handleSearchDropDown}>{tabVal}</a>
+            })}
+
         </div>
     {selectedOption.Genre &&
          <div className="">
@@ -82,6 +75,9 @@ export const Search = ()=>{
         <ArtistForm/>
      </div>}
 
+     {selectedOption.Song &&<div className="flex justify-center flex-col items-center h-screen">
+        <SongSearchForm/>
+     </div> }
 
     </div>
 }

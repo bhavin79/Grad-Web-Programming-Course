@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client"
 import { useParams, Link } from "react-router-dom";
-import { getAlbumById } from "./queries"
+import { getAlbumById, getSongByAlbumId } from "./queries"
 import {MyModal} from "../common/modal"
 import { AddSongForm } from "../songs/AddSongForm";
 import { EditSongForm } from "../songs/EditSong";
@@ -8,6 +8,10 @@ import { DeleteSongForm } from "../songs/DeleteSongForm";
 
 export const Album = ()=>{
     const {loading, data, error} = useQuery(getAlbumById, {
+        variables:{id:useParams().id},
+        fetchPolicy: 'cache-and-network'
+    });
+    const {loading:songLoading, data:songData, error:songError} = useQuery(getSongByAlbumId, {
         variables:{id:useParams().id},
         fetchPolicy: 'cache-and-network'
     });
@@ -34,7 +38,7 @@ export const Album = ()=>{
                 <div>
                     Songs: 
                         <ul>
-                            {album.songs.map((song)=>{
+                            {songData&& songData.getSongsByAlbumId.map((song)=>{
                                 return <div>
                                     <li> <Link to = {`/songs/${song.id}`}>{song.title}</Link></li>
                                     <MyModal CustomForm={DeleteSongForm} modalName={`${song.id}-del`} buttonName="Remove" data={{id: song.id, name: song.title}} />

@@ -27,6 +27,9 @@ function App() {
       <Route path='/search' element={<Search/>}/>  
 
       <Route path='/songs/:id' element={<Song/>}/>
+      <Route path='*' element={<div className="flex justify-center mt-10 text-xl">
+        <p>Not Found</p>
+    </div>}/>
     </Routes>
     </> 
   )

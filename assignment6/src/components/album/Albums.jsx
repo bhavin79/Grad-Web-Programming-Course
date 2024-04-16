@@ -16,17 +16,23 @@ export const Albums = ()=>{
     }
     if(error){
         console.log(error);
-        return <h1>{error.message}</h1>
+        return <div className="flex justify-center mt-10 text-xl">
+        <p>Not Found</p>
+    </div>
     }
     
     if(data){
         return (
-            <div>
-            <MyModal CustomForm={AddAlbumForm} buttonName="Add" modalName="addAlbum-Modal"/>
-            <div className="grid grid-cols-3 gap-4 mx-36 mt-10">
+            <div className="flex flex-col flex-wrap">
+            <div className="self-center text-3xl mt-10">Albums!</div>
+            <span className="self-end mr-10">
+                <MyModal CustomForm={AddAlbumForm} buttonName="Add" modalName="addAlbum-Modal"/>
+            </span>
+            <div className="grid grid-cols-3 gap-8 mx-36 mt-10">
                 {data.albums && data.albums.map(({title, genre, artist, recordCompany, id, releaseDate})=>{
-                    return <div className="flex flex-col flex-wrap border border-black rounded-md pl-2">
-                        <Link to={`/albums/${id}`}> title: {title}</Link>
+                    return <div className="card w-96 bg-zinc-100 shadow-lg">
+                        <div className="card-body">
+                        <Link  to={`/albums/${id}`}>Title: {title}</Link>
                         <span>genre: {genre}</span>
                         <span> artist: {artist.name}</span>
                         <span>record company: {recordCompany.name}</span>
@@ -34,6 +40,7 @@ export const Albums = ()=>{
                         <div className="flex flex-row justify-around">
                         <MyModal CustomForm={EditAlbumForm} buttonName="Edit" data={{title, genre, artist, recordCompany, id, releaseDate }} modalName={`${id}-edit`}/>
                         <MyModal CustomForm={DeleteAlbumForm} buttonName="Remove" data={{title, artist,  id }} modalName={`${id}-del`}/>
+                        </div>
                         </div>
                     </div>
                 })}

@@ -10,7 +10,10 @@ const Song = ({loading, data, error})=>{
     }
     if(error){
         console.log(error);
-        return <h1>{error.message}</h1>
+        return <div className="flex justify-center mt-10 text-xl">
+            <p>{error.message}</p>
+        </div>
+        
     }
     if(data){
         console.log(data);
@@ -18,10 +21,12 @@ const Song = ({loading, data, error})=>{
 
         return <div className="grid grid-cols-3 gap-4 mx-36 mt-10">
             {data&& data.searchSongByTitle.map((song)=>{
-                return <div className="flex flex-col flex-wrap border border-black rounded-md pl-2">
-                    <p>Title: {song.title}</p>
+                return <div className="card w-96 bg-zinc-100 shadow-lg">
+                <div className="card-body">
+                    <p>Title: <Link to={`/songs/${song.id}`}>{song.title}</Link></p>
                     <p>Album: <Link to= {`/albums/${song.albumId.id}`}>{song.albumId.title}</Link></p>
                     <p>Artist: <Link to= {`/artists/${song.albumId.artist.id}`}>{song.albumId.artist.name}</Link></p>
+                </div>
                 </div>
             }) }
         </div>
@@ -46,20 +51,27 @@ export const SongSearchForm =()=>{
 
     return(
         <div>
+            <div className="flex flex-row flex-wrap mt-10 justify-center">
             <form onSubmit={handleSubmit(handleSongSearch)}>
                 <input type={"text"}  
-                className= "border border-gray-300 p-1 rounded" 
+                className="input input-bordered"
+                placeholder="Song"
                 {...register("serachTerm", 
                 {required: "Search Term is required", 
                 validate:{
                     isEmpty: (searchTerm)=> searchTerm.trim().length>0 || "This cant be just empty spaces"
                 }})}></input>
+                <button type="submit" className="btn bg-gray-800 text-gray-50 py-1 px-5 ml-3 hover:bg-gray-900">Search</button>
                 {errors.serachTerm && (
                     <p className="errorMsg">{errors.serachTerm.message }</p>
                 )}
-                <button type="submit">Search</button>
           </form>
-          <Song data={data} error={error} loading={loading}/>
+          </div>
+          <div className="flex flex-col" >
+            <Song data={data} error={error} loading={loading}/>
+          </div>
+
+
         </div>
     )
 

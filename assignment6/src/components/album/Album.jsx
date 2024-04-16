@@ -3,10 +3,13 @@ import { useParams, Link } from "react-router-dom";
 import { getAlbumById, getSongByAlbumId } from "./queries"
 import {MyModal} from "../common/modal"
 import { AddSongForm } from "../songs/AddSongForm";
-import { EditSongForm } from "../songs/EditSong";
 import { DeleteSongForm } from "../songs/DeleteSongForm";
+import { EditAlbumForm } from "./EditAlbumForm";
+import { DeleteAlbumForm } from "./DeleteAlbumForm";
 
 export const Album = ()=>{
+    
+    const albumId =useParams().id;
     const {loading, data, error} = useQuery(getAlbumById, {
         variables:{id:useParams().id},
         fetchPolicy: 'cache-and-network'
@@ -20,7 +23,9 @@ export const Album = ()=>{
     }
     if(error){
         console.log(error);
-        return <h1>Something went wrong</h1>
+        return <div className="flex justify-center mt-10 text-xl">
+        <p>Not Found</p>
+    </div>
     }
     
     if(data){
@@ -40,14 +45,19 @@ export const Album = ()=>{
                         <ul>
                             {songData&& songData.getSongsByAlbumId.map((song)=>{
                                 return <div>
-                                    <li> <Link to = {`/songs/${song.id}`}>{song.title}</Link></li>
+                                    <li> <Link to = {`/songs/${song.id}`}>{song.title}</Link> - ({song.duration})</li>
                                     <MyModal CustomForm={DeleteSongForm} modalName={`${song.id}-del`} buttonName="Remove" data={{id: song.id, name: song.title}} />
                                 </div>
-                                
                             })}
                         </ul>
                     </div>
                 </div>}
+                <MyModal CustomForm={EditAlbumForm} buttonName="Edit" 
+                data={{title: album.title, genre: album.genre, artist:{name: album.artist.name, id:album.artist.id },
+recordCompany:{name: album.recordCompany.name, id:album.recordCompany.id}, id: albumId, releaseDate: album.releaseDate}} modalName={`${albumId}-edit`}/>
+                
+                <MyModal CustomForm={DeleteAlbumForm} buttonName="Remove" data={{title: album.title, artist:{name: album.artist.name, id:album.artist.id },  id:albumId }} modalName={`${albumId}-del`}/>
+
         </div>
         </div>
 

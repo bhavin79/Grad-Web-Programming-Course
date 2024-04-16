@@ -1,8 +1,12 @@
 import { useQuery } from "@apollo/client"
 import { useParams, Link } from "react-router-dom";
 import { getArtist, getSongsByArtist } from "./queries"
-
+import { EditArtist } from "./EditArtist";
+import { DeleteArtistForm } from "./DeleteArtist";
+import { MyModal } from "../common/modal";
 export const Artist = ()=>{
+    
+    const artistId = useParams().id
     const {loading, data, error} = useQuery(getArtist, {
         variables:{id:useParams().id},
         fetchPolicy: 'cache-and-network'
@@ -16,7 +20,9 @@ export const Artist = ()=>{
     }
     if(error){
         console.log(error);
-        return <h1>{error.message}</h1>
+        return <div className="flex justify-center mt-10 text-xl">
+        <p>Not Found</p>
+    </div>
     }
 
     if(data){
@@ -29,11 +35,12 @@ export const Artist = ()=>{
         if(artist.albums.length>0){
             albums = artist.albums;
         }
-       
 
         return <div className="flex justify-center items-center h-screen">
             {artist&& <div className="flex flex-col">
              <p>Name: {artist.name}</p>
+             <span> Date Formed: {artist.dateFormed}</span>
+
                         <div>
                             Members: 
                             <ul>  
@@ -59,6 +66,8 @@ export const Artist = ()=>{
                         </ul>
                     </div>}
                 </div>}
+                <MyModal CustomForm={EditArtist} modalName={`${artistId}-edit`} buttonName="Edit" data={{name:artist.name, id:artistId, members:artist.members, dateFormed:artist.dateFormed}}  />
+                <MyModal CustomForm={DeleteArtistForm} modalName={`${artistId}-del`} buttonName="Remove" data={{name:artist.name, id:artistId }}/>
         </div>
     }
 }

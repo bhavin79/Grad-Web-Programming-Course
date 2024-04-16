@@ -8,10 +8,10 @@ export const DeleteArtistForm =(props)=>{
         deleteArtistMutation({variables:{id: props.data.id}});
     }
 
-    return (<div>
+    return (<div className="flex flex-col">
         <h1>Are you sure you want to delete, <span className="text-orange-500">{props.data.name}</span>?</h1>
-        <div>
-        <button className="btn bg-orange-200 hover:bg-orange-500" onClick={handleDelete}>Delete!</button>
+        <div className="mt-2 self-end" >
+        <button className="btn bg-orange-200 hover:bg-orange-500 mr-3" onClick={handleDelete}>Delete!</button>
         </div>
         {loading && <p>deleting..</p>}
         {data && <p>Successfully delete! Refresh the page to see changes</p>}

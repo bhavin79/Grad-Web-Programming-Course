@@ -196,9 +196,12 @@ export const EditAlbumForm =({data:defaultData})=>{
                     )}></input>
                     {errors && errors.date && <p className="text-orange-600" >{errors.date.message}</p>}
                 <br/>
-                <button className="btn my-2 py-0" type="submit">Edit!</button>
-                <button className="btn my-2 py-0" type="submit" onClick={resetForm}>Reset Changes!</button>
+                <div className="flex flex-row justify-evenly mt-3">
+                <button className="btn bg-gray-800 text-gray-50 py-1 px-5 ml-3 hover:bg-gray-900" type="submit">Edit!</button>
+                <button className="btn bg-gray-800 text-gray-50 py-1 px-5 ml-3 hover:bg-gray-900" type="submit" onClick={resetForm}>Reset Changes!</button>
 
+                </div>
+   
                 {error && <p>{error.message}</p>}
                 {data &&<p>Successfully Edited. Refresh the page to see changes</p>}
           </form>

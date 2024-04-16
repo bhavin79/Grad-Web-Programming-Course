@@ -77,6 +77,7 @@ export const EditArtist =(props)=>{
                     })}/>
                       {errors && errors.name && <p className="text-orange-600" >{errors.name.message}</p>}
                 <br></br>
+                <label htmlFor="memberInput">Members:</label>
                 <div className="border border-gray-300 p-2 rounded">
                     <div className="flex flex-wrap gap-2">
                     {members.map((member, index) => (
@@ -87,6 +88,7 @@ export const EditArtist =(props)=>{
                     ))}
                     <input
                         type="text"
+                        id="memberInput"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={handleAddMember}
@@ -116,9 +118,11 @@ export const EditArtist =(props)=>{
                     )}></input>
                     {errors && errors.date && <p className="text-orange-600" >{errors.date.message}</p>}
                 <br/>
-                <button className="btn my-2 py-0" type="submit">Edit!</button>
-                <button className="btn my-2 py-0" type="submit" onClick={resetForm}>Clear Changes!</button>
+                <div className="flex flex-row justify-evenly mt-3">
 
+                <button className="btn bg-gray-800 text-gray-50 py-1 px-5 ml-3 hover:bg-gray-900" type="submit">Edit!</button>
+                <button className="btn bg-gray-800 text-gray-50 py-1 px-5 ml-3 hover:bg-gray-900" type="submit" onClick={resetForm}>Clear Changes!</button>
+                </div>
                 {error && <p>{error.message}</p>}
                 {data &&<p>Successfully Edited. Refresh the page to see edits</p>}
           </form>

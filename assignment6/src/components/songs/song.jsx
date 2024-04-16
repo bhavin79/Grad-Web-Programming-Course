@@ -15,7 +15,9 @@ export const Song = ()=>{
     }
     if(error){
         console.log(error);
-        return <h1>{error.message}</h1>
+        return <div className="flex justify-center mt-10 text-xl">
+        <p>Not Found</p>
+    </div>
     }
     if(data){
         const {getSongById:song} = data;

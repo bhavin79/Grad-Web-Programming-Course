@@ -9,17 +9,21 @@ const Companies = ({data, error, loading})=>{
         return <h1>Loading...</h1>
     }
     if(error){
-        return <h1>{error.message}</h1>
+        return <div className="flex justify-center mt-10 text-xl">
+        <p>{error.message}</p>
+    </div>
     }
     if(data){        
         return (
-            <div className="grid grid-cols-3 gap-4 mx-36 mt-10">
+            <div className="grid grid-cols-3 gap-8 mx-36 mt-10">
                 {data.companyByFoundedYear && data.companyByFoundedYear.map(({id, name, country, numOfAlbums})=>{
-                    return <div className="flex flex-col flex-wrap border border-black rounded-md pl-2">
-                        <Link to={`/companies/${id}`}> Name: {name}</Link>
-                        <span> Number Of Albums: {numOfAlbums}</span>
-                        <span>Country: {country}</span>
-                    </div>
+                    return <div className="card w-96 bg-zinc-100 shadow-lg">
+                        <div className="card-body">
+                            <Link to={`/companies/${id}`}> Name: {name}</Link>
+                            <span> Number Of Albums: {numOfAlbums}</span>
+                            <span>Country: {country}</span>
+                        </div>
+                        </div>
                 })}
             </div>
         
@@ -57,9 +61,11 @@ export const CompaniesForm =()=>{
 
     return(
         <div>
+            <div className="flex flex-row flex-wrap mt-10 justify-center">
+
             <form onSubmit={handleSubmit(handleArtistSearch)}>
                 <label htmlFor="minYear">Min year: </label>
-                <input type={"number"} id="minYear" placeholder="Min Year" {...register("minYear", {validate:{
+                <input type={"number"} className="input input-bordered" id="minYear" placeholder="Min Year" {...register("minYear", {validate:{
                     min: (minYear)=> {   
                         if(minYear.trim().length == 0){
                             return true;
@@ -67,8 +73,8 @@ export const CompaniesForm =()=>{
                         minYear = Number(minYear);
                         return minYear>=1900 || "This cant be before 1900"}
                 }})}></input>
-                <label htmlFor="maxYear">Max year: </label>
-                <input type={"number"} id= "maxYear"placeholder="Max Year" {...register("maxYear", {validate:{
+                <label htmlFor="maxYear" className="ml-2">Max year: </label>
+                <input type={"number"} className="input input-bordered" id= "maxYear"placeholder="Max Year" {...register("maxYear", {validate:{
                     max: (maxYear)=> {   
                         if(maxYear.trim().length == 0){
                             return "Max Year must be provided";
@@ -77,6 +83,8 @@ export const CompaniesForm =()=>{
 
                         return maxYear>=1900 || "Max year cant be before 1900"}
                 }})}></input>
+                <button type="submit" className="btn bg-gray-800 text-gray-50 py-1 px-5 ml-3 hover:bg-gray-900">Search</button>
+
                 {errors.minYear && (
                     <p className="errorMsg">{errors.minYear.message }</p>
                 )}
@@ -86,10 +94,11 @@ export const CompaniesForm =()=>{
                 <p>
                     {customInputError}
                 </p>
-                <button type="submit">Search</button>
           </form>
-
-          <Companies data={data} error={error} loading={loading}/>
+            </div>
+            <div className="flex flex-col" >
+                <Companies data={data} error={error} loading={loading}/>
+            </div>
         </div>
     )
 

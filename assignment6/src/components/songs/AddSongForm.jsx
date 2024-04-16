@@ -5,9 +5,7 @@ import { addSong } from "./queries";
 import { useParams } from "react-router-dom";
 import { getAlbumById, getSongByAlbumId } from "../album/queries";
 
-
 export const AddSongForm =()=>{
-
     const {
         register,
         handleSubmit,
@@ -71,10 +69,11 @@ export const AddSongForm =()=>{
                     })}/>
                       {errors && errors.duration && <p className="text-orange-600" >{errors.duration.message}</p>}
                 <br></br>
-             
-                <button className="btn my-2 py-0" type="submit">Add!</button>
-                <button className="btn my-2 py-0" type="submit" onClick={resetForm}>Clear!</button>
+                <div className="flex flex-row justify-evenly mt-3">
 
+                <button className="btn bg-gray-800 text-gray-50 py-1 px-5 ml-3 hover:bg-gray-900" type="submit">Add!</button>
+                <button className="btn bg-gray-800 text-gray-50 py-1 px-5 ml-3 hover:bg-gray-900" type="submit" onClick={resetForm}>Clear!</button>
+                </div>
                 {error && <p>{error.message}</p>}
                 {data &&<p>Successfully added!</p>}
           </form>

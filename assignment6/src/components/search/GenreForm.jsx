@@ -22,18 +22,22 @@ const Genres = ({data, error, loading})=>{
     }
     if(error){
         console.log(error);
-        return <h1>{error.message}</h1>
+        return <div className="flex justify-center mt-10 text-xl">
+        <p>{error.message}</p>
+    </div>
     }
     if(data){
         return (
-        <div className="grid grid-cols-3 gap-4 mx-36 mt-10">
+        <div className="grid grid-cols-3 gap-8 mx-36 mt-10">
             {data.albumsByGenre && data.albumsByGenre.map(({title, genre, artist, recordCompany, id, releaseDate})=>{
-                return <div className="flex flex-col flex-wrap border border-black rounded-md pl-2">
+                return <div className="card w-96 bg-zinc-100 shadow-lg">
+                   <div className="card-body">
                     <p>Title: <Link to={`/albums/${id}`}>{title}</Link></p>
                     <p>Genre: {genre}</p>
                     <p>Artist:<Link to ={`/artists/${artist.id}`}> {artist.name}</Link></p>
                     <p>Record Company: <Link to ={`/companies/${recordCompany.id}`}>{recordCompany.name}</Link></p>
                     <p>Release Date: {releaseDate}</p>
+                    </div>
                 </div>
             })}
         </div>
@@ -53,7 +57,9 @@ export const GenreForm =()=>{
     const [customInputError, setCustomInputError] = useState("");
 
     const [getGenre, {data, loading, error}]= useLazyQuery(getAlbumsByGenre,{fetchPolicy: 'cache-and-network'})
-    
+      
+
+
     const handleGenreSearch = (formData)=>{
         console.log(formData.searchTerm);
         let genre = formData.searchTerm.toUpperCase();
@@ -112,17 +118,24 @@ export const GenreForm =()=>{
 
     return(
         <div>
+        <div className="flex flex-row flex-wrap mt-10 justify-center">
             <form onSubmit={handleSubmit(handleGenreSearch)}>
-                <input type={"text"} {...register("searchTerm", {required: "Search Term is required", validate:{
+                <input placeholder="Genre" type={"text"} className="input input-bordered"  {...register("searchTerm", {required: "Search Term is required", validate:{
                     isEmpty: (searchTerm)=> searchTerm.trim().length>0 || "This cant be just empty spaces"
                 }})}></input>
+                <button type="submit" className="btn bg-gray-800 text-gray-50 py-1 px-5 ml-3 hover:bg-gray-900">Search</button>
+
                 {errors.searchTerm && (
                     <p className="errorMsg">{errors.searchTerm.message }</p>
                 )}
                 <p>{customInputError}</p>
-                <button type="submit">Search</button>
+
           </form>
-          <Genres data={data} error={error} loading={loading}/>
+          </div>
+          <div className="flex flex-col" >
+            <Genres data={data} error={error} loading={loading}/>
+          </div>
+
         </div>
     )
 

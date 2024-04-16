@@ -1,10 +1,25 @@
-import {assertSchema, GraphQLError} from 'graphql';
+import {assertSchema, GraphQLScalarType, GraphQLError} from 'graphql';
 import { ObjectId } from 'mongodb';
 import { albums, artists, recordcompanies, songs } from './config/mongoCollection.js';
 import { getRedisClient } from './config/redisConnect.js';
 import { getAll, getOne, insertOne, deleteOne, findOneAndUpdate, deleteMany } from './dbAbstraction.js';
 import validation from "./validation.js"
+
+
+const customDate = new GraphQLScalarType({
+    name: 'Date',
+    description: 'Custom Date',
+    serialize(val){
+        return validation.validDateScalar(val)
+    },
+    parseValue(val){
+        return validation.validDateScalar(val);
+    },
+    parseLiteral(val){ return validation.validDateScalar(val)},
+  });
+
 export const resolvers = {
+    Date: customDate,
     Query:{
         artists: async (_, args) =>{
             const redisClient = await getRedisClient();
@@ -838,6 +853,7 @@ export const resolvers = {
   Mutation:{
     addArtist: async(_, args)=>{
         let {name, date_formed, members}  = args;
+        console.log(date_formed);
         const redisClient = await getRedisClient();
 
         //Input validation;
@@ -1342,8 +1358,8 @@ export const resolvers = {
                  },
             }) 
         }
-
-
+        //TODO: Check dates before entering.
+ 
         // check if same album exists with same artist ID;
         let allAlbumByArtist = await getAll(albums, {artistId: new ObjectId(artistId)});
 

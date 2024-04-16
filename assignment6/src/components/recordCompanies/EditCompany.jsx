@@ -91,9 +91,11 @@ export const EditCompanyForm =({data:dataDefault})=>{
                       {errors && errors.foundedYear && <p className="text-orange-600" >{errors.foundedYear.message}</p>}
 
                 <br></br>
-             
-                <button className="btn my-2 py-0" type="submit">Edit!</button>
-                <button className="btn my-2 py-0" type="submit" onClick={resetForm}>Clear!</button>
+                <div className="flex flex-row justify-evenly mt-3">
+                <button className="btn bg-gray-800 text-gray-50 py-1 px-5 ml-3 hover:bg-gray-900" type="submit">Edit!</button>
+                <button className="btn bg-gray-800 text-gray-50 py-1 px-5 ml-3 hover:bg-gray-900"  type="submit" onClick={resetForm}>Clear Changes!</button>
+                
+                </div>
 
                 {error && <p>{error.message}</p>}
                 {data &&<p>Successfully Edited. Refresh the page to see changes</p>}

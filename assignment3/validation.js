@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import { GraphQLError} from 'graphql';
 
 const validString = (string, parameter = "input", maxLength = null) => {
     if (string === undefined || !string || typeof string !== "string")
@@ -82,6 +83,72 @@ const validDate = (date, param)=>{
     return inputDate;
 }
 
+const validDateScalar = (date, param = "Date")=>{
+  date = validString(date, param);
+  let finalDate= date;
+  date = date.split("/");
+  if(date.length!= 3){
+      throw new GraphQLError("Invalid date format", {
+        extensions: {
+          code: 'BAD_USER_INPUT',
+         },
+    }) 
+  }
+  
+  // Month;
+  try {
+    validNumber(Number(date[0]),"month", 1, 12);
+  } catch (error) {
+    throw new GraphQLError(error, {
+      extensions: {
+        code: 'BAD_USER_INPUT',
+       },
+  }) 
+  }
+
+  //day
+  try {
+    validNumber(Number(date[1]),"day", 1, 31);
+  } catch (error) {
+    throw new GraphQLError(error, {
+      extensions: {
+        code: 'BAD_USER_INPUT',
+       },
+    }) 
+  }
+
+  //year
+  try {
+    validNumber(Number(date[2], "year", 0, 2024));
+  } catch (error) {
+    throw new GraphQLError(error, {
+      extensions: {
+        code: 'BAD_USER_INPUT',
+       },
+    }) 
+  }
+  
+  const format = `${date[0]}/${date[1]}/${date[2]}`
+  let inputDate = new Date(format)
+  if(Number(inputDate.getDate()) != Number(date[1]) || 
+      Number(inputDate.getMonth())+1 != Number(date[0]) ||
+      Number(inputDate.getFullYear()) != Number(date[2])){
+          throw new GraphQLError("Invalid Date", {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+             },
+          }) 
+    }
+  const currentDate = new Date();
+
+  if(inputDate>currentDate){
+      throw `Date can't be in future`;
+  }
+
+  return finalDate;
+}
+
+
 const validArrayOfStrings = (array, parameter = "input") => {
   if (!array || !Array.isArray(array)) throw `${parameter} is not an array`;
   const arr = [];
@@ -143,6 +210,5 @@ const validGenre = (genre)=>{
   }
   return genre.toLowerCase();
 }
-const validations ={validString, validNumber, validObjectId, validDate, validArrayOfStrings, dateFormat, validDuration, validGenre};
-
+const validations ={validString, validNumber, validObjectId, validDate, validArrayOfStrings, dateFormat, validDuration, validGenre, validDateScalar};
 export default validations;

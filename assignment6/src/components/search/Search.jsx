@@ -55,27 +55,29 @@ export const Search = ()=>{
 
     console.log(selectedOption);
     const tabsList = ["Genre", "CompanyFoundYear", "Artist", "Song"]
-    return <div className="flex flex-col items-center h-screen">
-        <div role="tablist" className="tabs tabs-lifted">
+    return <div className="flex flex-col flex-wrap">
+        <span className="self-center text-3xl mt-5">Search!</span>
+
+        <div role="tablist" className="tabs tabs-lifted mt-3">
             {tabsList.map((tabVal)=>{
                  return  <a role="tab" className={`tab ${getTabStyle(tabVal)}`} name={tabVal} onClick={handleSearchDropDown}>{tabVal}</a>
             })}
 
         </div>
     {selectedOption.Genre &&
-         <div className="">
+         <div>
             <GenreForm/>
         </div>
     }
-    {selectedOption.CompanyFoundYear && <div className="flex flex-row justify-center items-center h-screen">
+    {selectedOption.CompanyFoundYear && <div>
         <CompaniesForm/>
         </div>}
 
-    {selectedOption.Artist && <div className="flex justify-center flex-col items-center h-screen">
+    {selectedOption.Artist && <div>
         <ArtistForm/>
      </div>}
 
-     {selectedOption.Song &&<div className="flex justify-center flex-col items-center h-screen">
+     {selectedOption.Song &&<div>
         <SongSearchForm/>
      </div> }
 

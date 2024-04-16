@@ -17,7 +17,7 @@ const {url} = await startStandaloneServer(server, {
 });
 
 console.log(`Server ready at: ${url}`);
-const client = await getRedisClient();
-await client.flushDb();
+// const client = await getRedisClient();
+// await client.flushDb();
 
 

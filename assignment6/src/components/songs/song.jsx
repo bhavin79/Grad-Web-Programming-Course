@@ -22,17 +22,25 @@ export const Song = ()=>{
     if(data){
         const {getSongById:song} = data;
 
-        return <div className="flex justify-center items-center h-screen">
+        return <div className="flex flex-col mx-20 my-10">
             {song&& <div className="flex flex-col">
-             <p>Title: {song.title}</p>
+             <p className="text-5xl"> {song.title}</p>
+             <div className="my-10">
+
              <p>Album: <Link to= {`/albums/${song.albumId.id}`}>{song.albumId.title}</Link></p>
              <p>Artist: <Link to= {`/artists/${song.albumId.artist.id}`}>{song.albumId.artist.name}</Link></p>
              <p>Duration: {song.duration}</p>
-             
-             <MyModal CustomForm={EditSongForm} modalName={`${song.id}-edit`} buttonName="Edit" data={{id:song.id, albumId: song.albumId.id, duration: song.duration, title: song.title}}/>
+             </div>
+             <div className="flex flex-row justify-end mr-40">
+             <div className="mx-7">
+                <MyModal CustomForm={EditSongForm} modalName={`${song.id}-edit`} buttonName="Edit" data={{id:song.id, albumId: song.albumId.id, duration: song.duration, title: song.title}}/>
+             </div>
+             <div>
+
              <MyModal CustomForm={DeleteSongForm} modalName={`${song.id}-del`} buttonName="Remove" data={{id:song.id, name: song.title}}/>
-   
-                </div>}
+            </div>
+            </div>
+        </div>}
         </div>
     }
 }

@@ -4,6 +4,7 @@ import { Album } from './components/album/Album'
 import { Albums } from './components/album/Albums'
 import { Artist } from './components/artist/Artist'
 import { Artists } from './components/artist/Artists'
+import { HomePage } from './components/Home'
 import { NavBar } from './components/NavBar'
 import { RecordCompanies } from './components/recordCompanies/RecordCompanies'
 import { RecordCompany } from './components/recordCompanies/RecordCompany'
@@ -27,6 +28,8 @@ function App() {
       <Route path='/search' element={<Search/>}/>  
 
       <Route path='/songs/:id' element={<Song/>}/>
+      
+      <Route path='/' element={<HomePage/>}/>
       <Route path='*' element={<div className="flex justify-center mt-10 text-xl">
         <p>Not Found</p>
     </div>}/>

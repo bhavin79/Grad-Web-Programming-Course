@@ -33,7 +33,7 @@ export const Artists = ()=>{
                        <div className="card-body">
                         <Link to={`/artists/${id}`}> Name: {name}</Link>
                         <div className="flex flex-row flex-wrap">
-                           Members:{members.map((member)=><span className=" mx-2 py-1 px-2 rounded-3xl bg-white shadow-md text-green-800" >{member}</span>)}
+                           Members:{members.map((member)=><span className="mx-2 py-1 px-2 rounded-3xl bg-white shadow-md text-green-800" >{member}</span>)}
                             </div>
                         <span> Number Of Albums: {numOfAlbums}</span>
 

@@ -31,33 +31,47 @@ export const Album = ()=>{
     if(data){
         console.log(data);
         let album = data.getAlbumById;
-        return <div> 
-            <MyModal CustomForm={AddSongForm} buttonName="Add new song!" modalName="addSong-modal"/>
-            <div className="flex justify-center items-center h-screen">
+        return <div className="flex flex-col mx-20 my-10">
+            <div className="flex flex-col">
             {data&& <div className="flex flex-col">
-                <p>Aritst Name:<Link to={`/artists/${album.artist.id}`}> {album.artist.name} </Link></p>
-                <p>Album Title:{album.title}</p>
-                <p>Release Date: {album.releaseDate}</p>
+            <p className="text-5xl">{album.title}  <Link className="text-3xl" to={`/artists/${album.artist.id}`}>- by {album.artist.name} </Link></p>
+                <p>{album.releaseDate}</p>
+
+                <div className="my-10">
                 <p>Record Company: <Link to = {`/companies/${album.recordCompany.id}`}> {album.recordCompany.name} </Link></p>
                 <p>Genre: {album.genre}</p>
+                </div>
+
                 <div>
                     Songs: 
                         <ul>
                             {songData&& songData.getSongsByAlbumId.map((song)=>{
                                 return <div>
-                                    <li> <Link to = {`/songs/${song.id}`}>{song.title}</Link> - ({song.duration})</li>
-                                    <MyModal CustomForm={DeleteSongForm} modalName={`${song.id}-del`} buttonName="Remove" data={{id: song.id, name: song.title}} />
+                                    <li className="flex flex-row  my-2 py-1 px-2 rounded-md w-1/4"> <Link to = {`/songs/${song.id}`}>{song.title}</Link> - ({song.duration})  
+                                    <span className="ml-8"><MyModal CustomForm={DeleteSongForm} modalName={`${song.id}-del`} buttonName="X" data={{id: song.id, name: song.title}} />
+                                        </span></li> 
                                 </div>
                             })}
                         </ul>
                     </div>
                 </div>}
+                <div className="flex flex-row justify-end mr-20">
+
+                <div className="mx-7">
+                 <MyModal CustomForm={AddSongForm} buttonName="Add new song!" modalName="addSong-modal"/>
+
+                </div>
+                <div>
+
                 <MyModal CustomForm={EditAlbumForm} buttonName="Edit" 
                 data={{title: album.title, genre: album.genre, artist:{name: album.artist.name, id:album.artist.id },
 recordCompany:{name: album.recordCompany.name, id:album.recordCompany.id}, id: albumId, releaseDate: album.releaseDate}} modalName={`${albumId}-edit`}/>
-                
-                <MyModal CustomForm={DeleteAlbumForm} buttonName="Remove" data={{title: album.title, artist:{name: album.artist.name, id:album.artist.id },  id:albumId }} modalName={`${albumId}-del`}/>
+                </div>
 
+                <div className="mx-7">
+                <MyModal CustomForm={DeleteAlbumForm} buttonName="Remove" data={{title: album.title, artist:{name: album.artist.name, id:album.artist.id },  id:albumId }} modalName={`${albumId}-del`}/>
+                </div>
+            </div>
         </div>
         </div>
 

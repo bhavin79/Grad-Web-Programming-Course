@@ -20,7 +20,6 @@ export const Cores = ()=>{
                 }
                 setLoading(false)
             }
-
         getData();    
     }, [])
     if(loading){

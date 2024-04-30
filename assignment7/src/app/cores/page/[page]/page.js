@@ -6,7 +6,6 @@ import { fetchData, getTotalPages } from "@/utility/helper";
 
 export async function getStaticPaths() {    
     let pages = await getTotalPages("cores");
-    console.log(pages, "Cores");
     return {
       paths: pages,
       fallback:true
@@ -24,6 +23,6 @@ export default async function CoresPage({params}){
     }
     
     if(data){
-        return <GenericPage data={data} ListComponent={CoresList} category="launches"/>
+        return <GenericPage data={data} ListComponent={CoresList} category="cores"/>
     }
 }

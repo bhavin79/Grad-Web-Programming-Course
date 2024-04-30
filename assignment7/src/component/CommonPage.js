@@ -17,7 +17,7 @@ export const GenericPage = ({data, ListComponent, category})=>{
         {launchData && 
             <div className="listData">
            { launchData.map((data)=>{
-                return <ListComponent data={data}/>
+                return <ListComponent key={data.id} data={data}/>
             })}
             </div>
         }

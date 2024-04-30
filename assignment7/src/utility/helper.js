@@ -20,3 +20,17 @@ export const getTotalPages = async(category)=>{
     });
     return pages;
 }
+
+
+export const getAllIds = async(category)=>{
+    let {data} =  await axios.get(`https://api.spacexdata.com/v4/${category}`);
+    return data.map((individual) =>{
+        return {params: {id:individual.id}}
+    })       
+  
+}
+
+export const getSingle = async(category, id)=>{
+    let {data} = await axios.get(`https://api.spacexdata.com/v4/${category}/${id}`)
+    return data; 
+}

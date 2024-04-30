@@ -1,4 +1,5 @@
 import { getSingle, getAllIds } from "@/utility/helper";
+import { LaunchPad } from "./LaunchPad";
 
 export async function getStaticPaths() {    
     let ids = await getAllIds("launchpads");
@@ -8,11 +9,11 @@ export async function getStaticPaths() {
     };
   }
 
-export default async function CoreSingle({params}){
+export default async function LaunchPadSingle({params}){
     //Validate ID;
     const data = await getSingle("launchpads", params.id);
  
     if(data){
-       return <CoreIndi coreData = {data}/>
+       return <LaunchPad launchPadData = {data}/>
     }
 }

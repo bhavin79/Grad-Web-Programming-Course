@@ -1,7 +1,8 @@
 import { getSingle, getAllIds } from "@/utility/helper";
+import { Ship } from "./Ship";
 
 export async function getStaticPaths() {    
-    let ids = await getAllIds("launchpads");
+    let ids = await getAllIds("ships");
     return {
       paths:ids,
       fallback:true
@@ -10,9 +11,9 @@ export async function getStaticPaths() {
 
 export default async function CoreSingle({params}){
     //Validate ID;
-    const data = await getSingle("launchpads", params.id);
+    const data = await getSingle("ships", params.id);
  
     if(data){
-       return <CoreIndi coreData = {data}/>
+       return <Ship shipData = {data}/>
     }
 }

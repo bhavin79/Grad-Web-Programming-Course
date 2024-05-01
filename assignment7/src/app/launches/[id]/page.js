@@ -1,3 +1,4 @@
+import { NotFound } from "@/component/NotFound";
 import { getSingle, getAllIds } from "@/utility/helper";
 import { Launch } from "./Launch";
 
@@ -15,5 +16,7 @@ export default async function LaunchSingle({params}){
  
     if(data){
        return <Launch launchData = {data}/>
+    }else{
+      return <NotFound/>
     }
-}
+  }

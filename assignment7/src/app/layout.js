@@ -12,10 +12,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className="root" >
       <div className='navBar'>
-      <Link href='/'>Home</Link>
-     
+      <Link href='/' className="links">Home</Link>
       <div className='nav'>
        <Link href='/rockets/page/0'  className='links'>Rockets</Link>
         <Link href='/launchpads/page/0' className='links'>Launch Pads</Link>
@@ -27,10 +26,7 @@ export default function RootLayout({ children }) {
           <Link href ="/company" className='links'>Company</Link>
       </div>
     </div>
-
         {children}
-      
-      
       </body>
     </html>
   );

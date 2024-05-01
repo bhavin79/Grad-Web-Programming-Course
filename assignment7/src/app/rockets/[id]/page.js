@@ -1,3 +1,4 @@
+import { NotFound } from "@/component/NotFound";
 import { getSingle, getAllIds } from "@/utility/helper";
 import { Rocket } from "./Rocket";
 
@@ -14,5 +15,7 @@ export default async function RocketSingle({params}){
     const data = await getSingle("rockets", params.id);
     if(data){
        return <Rocket rocketData = {data}/>
+    }else{
+      return <NotFound/>
     }
 }

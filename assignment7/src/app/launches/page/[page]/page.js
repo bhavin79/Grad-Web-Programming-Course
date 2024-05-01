@@ -1,8 +1,8 @@
 import { GenericPage } from '@/component/CommonPage';
-import { LaunchList } from "@/component/LaunchList";
 import { InValidInput } from "@/component/InValidInput";
 import { NotFound } from "@/component/NotFound";
 import { fetchData, getTotalPages } from "@/utility/helper";
+import { LaunchList } from './LaunchList';
 
 export async function getStaticPaths() {    
     let pages = await getTotalPages("launches");
@@ -24,5 +24,7 @@ export default async function LaunchPage({params}){
     
     if(data){
         return <GenericPage data={data} ListComponent={LaunchList} category="launches"/>
+    }else{
+        <NotFound/>
     }
 }

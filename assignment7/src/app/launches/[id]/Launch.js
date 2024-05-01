@@ -4,7 +4,6 @@ import Link from "next/link";
 
 export const Launch = ({launchData})=>{
     const [data, setData] = useState(launchData);
-    console.log(data);
     const payloadExist = data.payloads.length>0;
     const shipsExist = data.ships.length>0;
     const failExist = data.failures.length>0;
@@ -51,8 +50,8 @@ export const Launch = ({launchData})=>{
                                         </div> 
                                         <div className="scrollSectionGrid">
                                             <ol>
-                                                {data.failures.map((fail)=>{
-                                                    return <li>
+                                                {data.failures.map((fail, index)=>{
+                                                    return <li key={index}>
                                                     {fail.reason}
                                                     </li>
                                                 })}
@@ -68,8 +67,8 @@ export const Launch = ({launchData})=>{
                                         </div> 
                                         <div className="scrollSectionGrid">
                                             <ol>
-                                                {data.payloads.map((payload)=>{
-                                                    return <li>
+                                                {data.payloads.map((payload, index)=>{
+                                                    return <li key={index}>
                                                     <Link href ={`/payloads/${payload}`}>{payload}</Link>
                                                     </li>
                                                 })}
@@ -85,8 +84,8 @@ export const Launch = ({launchData})=>{
                                         </div> 
                                         <div className="scrollSectionGrid">
                                             <ol>
-                                                {data.ships.map((ship)=>{
-                                                    return <li>
+                                                {data.ships.map((ship, index)=>{
+                                                    return <li key={index}>
                                                     <Link href ={`/ships/${ship}`}>{ship}</Link> 
                                                     </li>
                                                 })}
@@ -103,8 +102,8 @@ export const Launch = ({launchData})=>{
                                         </div> 
                                         <div className="scrollSectionGrid">
                                             <ol>
-                                                {data.capsules.map((capsule)=>{
-                                                    return <li>
+                                                {data.capsules.map((capsule, index)=>{
+                                                    return <li key={index}>
                                                     <Link href ={`/capsules/${capsule}`}>{capsule}</Link> 
                                                     </li>
                                                 })}
@@ -120,8 +119,8 @@ export const Launch = ({launchData})=>{
                                         </div> 
                                         <div className="scrollSectionGrid">
                                             <ol>
-                                                {data.cores.map((core)=>{
-                                                    return <li >
+                                                {data.cores.map((core, index)=>{
+                                                    return <li key={index} >
                                                     <Link href ={`/cores/${core.core}`}> {core.core}</Link> 
                                                         <ul>
                                                             <li>Flight: {core.flight}</li>

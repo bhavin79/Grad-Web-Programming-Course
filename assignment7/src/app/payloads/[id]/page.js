@@ -1,3 +1,4 @@
+import { NotFound } from "@/component/NotFound";
 import { getSingle, getAllIds } from "@/utility/helper";
 import { Payload } from "./Payload";
 
@@ -15,5 +16,7 @@ export default async function PayloadSingle({params}){
  
     if(data){
        return <Payload payloadData={data}/>
+    }else{
+      return <NotFound/>
     }
 }

@@ -12,16 +12,21 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+a{
+  color: #DADADA;
+  text-decoration: none; 
+}
 a:hover {
-  color: #535bf2;
+  color:rgb(80, 241, 214);
 }
 
+
+
 body {
-  margin: 0;
+  margin: 0px;
+  padding: 0px;
   min-width: 320px;
   min-height: 100vh;
-  box-sizing: border-box;
 }
 
 
@@ -34,6 +39,8 @@ body {
   /* background-color:  #1F1A1A; */
   height: 100vh;
   overflow: auto;
+  box-sizing: border-box;
+
 }
 
 .read-the-docs {
@@ -41,11 +48,11 @@ body {
 }
 
 .navBar{
-  margin: 0.3rem;
   position: relative;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  background-color: #1f1f1f;
 }
 
 .nav{
@@ -56,7 +63,14 @@ body {
 
 .links{
     padding: 1rem;
+    color:#DADADA;
+    text-decoration: none;
 }
+.links:hover{
+  color:rgb(80, 241, 214) ;
+  text-decoration:wavy;
+}
+
 
 
 .card{
@@ -71,7 +85,36 @@ body {
   text-decoration: none;
 }
 
+.card:hover{
+  box-shadow: 0 8px 16px 0 rgb(0, 0, 0);
+  cursor: pointer;
+  -webkit-transform: translateY(-1px);
+	transform: translateY(-1px);
 
+}
+
+.cardBody{
+  padding-left: 0.3rem;
+  padding-bottom: 0.3rem;
+  padding-top: 0.3rem;
+  border-top: solid #A8A6AC 0.1px;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+}
+
+.btn{
+  font-size: x-large;
+  padding: 0.5rem 1rem;
+  background-color: #DADADA;
+  border-radius: 0.4rem;
+  border: #DADADA;
+}
+.btn:hover{
+  box-shadow: 0 8px 16px 0 rgb(0, 0, 0);
+  cursor: pointer;
+  -webkit-transform: translateY(-1px);
+	transform: translateY(-1px);
+}
 .listData{
   margin-top: 1.5rem;
   margin-left: 8rem;

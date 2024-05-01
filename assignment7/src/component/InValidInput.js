@@ -1,5 +1,5 @@
 export const InValidInput =({msg})=>{
-    return <div className="InValidInput">
+    return <div className="notFound">
         <p>{msg}</p> 
     </div>
 }

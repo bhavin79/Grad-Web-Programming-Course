@@ -69,7 +69,7 @@ export const Ship = ({shipData})=>{
                                 </div>
                                 <div className="innerFlex">
                                     <ul>
-                                        {data.launches.map((launch=> <li><Link href={`/launches/${launch}`}>{launch}</Link></li>))}
+                                        {data.launches.map(((launch, index)=> <li key={index}><Link href={`/launches/${launch}`}>{launch}</Link></li>))}
                                     </ul>
                                 </div>
                         </div>}
@@ -80,7 +80,7 @@ export const Ship = ({shipData})=>{
                             </div>
                             <div className="innerFlex">
                             <ul>
-                                {data.roles.map((role)=><li>{role}</li>)}
+                                {data.roles.map((role, index)=><li key={index}>{role}</li>)}
                                 </ul>
                             </div>
                         </div>}

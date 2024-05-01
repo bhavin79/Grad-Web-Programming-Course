@@ -17,9 +17,12 @@ export const LaunchPadsList = ({data})=>{
     
     return <Link href = {`/launchpads/${data.id}`} className="card">
         <img src={data.images.large} width="300" height="300" alt={data.name}/>
-        <div className="title">{data.name}</div>
-        {locality && <div className="body">{locality}</div>}
-        <div className="footer">Latitude: {data.latitude}, Longitude:{data.longitude}</div>
-        <div className="tag">{data.status}</div>
+        <div className='cardBody'>
+
+            <div className="title">{data.name}</div>
+            {locality && <div className="body">{locality}</div>}
+            <div className="footer">Latitude: {data.latitude}, Longitude:{data.longitude}</div>
+            <div className="tag">{data.status}</div>
+        </div>
     </Link>
 } 

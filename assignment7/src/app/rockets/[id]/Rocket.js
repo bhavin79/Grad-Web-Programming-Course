@@ -6,7 +6,6 @@ import { useState } from "react";
 
 export const Rocket = ({rocketData})=>{
     const [data, setData] = useState(rocketData);
-    console.log(data)
     let  reusable = data.first_stage.reusable?"Yes":"No";
     return (
         <div>

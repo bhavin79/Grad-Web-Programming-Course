@@ -1,3 +1,4 @@
+import { NotFound } from "@/component/NotFound";
 import { getSingle, getAllIds } from "@/utility/helper";
 import { LaunchPad } from "./LaunchPad";
 
@@ -15,5 +16,7 @@ export default async function LaunchPadSingle({params}){
  
     if(data){
        return <LaunchPad launchPadData = {data}/>
+    }else{
+      return <NotFound/>
     }
 }

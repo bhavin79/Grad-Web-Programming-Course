@@ -38,8 +38,8 @@ export const LaunchPad = ({launchPadData})=>{
                             <div className="LP_Links">
                                 <span>Rockets</span>
                                 <ul>
-                                    {data.rockets.map((rocket)=>{
-                                        return <li>
+                                    {data.rockets.map((rocket, index)=>{
+                                        return <li key={index}>
                                             <Link href = {`/rockets/${rocket}`}>{rocket}</Link>
                                         </li>
                                     })}
@@ -53,8 +53,8 @@ export const LaunchPad = ({launchPadData})=>{
                             <div className="LP_Links">
                             <span>Launches</span>
                             <ul>
-                                {data.launches.map((launch)=>{
-                                    return <li>
+                                {data.launches.map((launch,index)=>{
+                                    return <li key={index}>
                                         <Link href = {`/launches/${launch}`}>{launch}</Link>
                                     </li>
                                 })}

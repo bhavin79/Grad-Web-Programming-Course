@@ -31,6 +31,11 @@ export const getAllIds = async(category)=>{
 }
 
 export const getSingle = async(category, id)=>{
-    let {data} = await axios.get(`https://api.spacexdata.com/v4/${category}/${id}`)
-    return data; 
+    try {
+        let {data} = await axios.get(`https://api.spacexdata.com/v4/${category}/${id}`)
+        return data; 
+    } catch (error) {
+        return null;
+    }
+
 }

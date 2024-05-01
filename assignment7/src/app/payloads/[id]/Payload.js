@@ -52,8 +52,8 @@ export const Payload = ({payloadData})=>{
                     </div>}
                     {customerExist && <div className="payloadGridBox2">
                             <ol>
-                                {data.customers.map((cus)=>{
-                                    return <li>{cus}</li>
+                                {data.customers.map((cus, index)=>{
+                                    return <li key={index}>{cus}</li>
                                 })}
                             </ol>
                     </div>}
@@ -68,8 +68,8 @@ export const Payload = ({payloadData})=>{
                     </div>}
                     {nationalitiesExist && <div className="payloadGridBox2">
                             <ol>
-                                {data.nationalities.map((nat)=>{
-                                    return <li>{nat}</li>
+                                {data.nationalities.map((nat, index)=>{
+                                    return <li key={index}>{nat}</li>
                                 })}
                             </ol>
                     </div>}
@@ -84,8 +84,8 @@ export const Payload = ({payloadData})=>{
                     </div>}
                     {manufacturerExist && <div className="payloadGridBox2">
                             <ol>
-                                {data.manufacturers.map((manu)=>{
-                                    return <li>{manu}</li>
+                                {data.manufacturers.map((manu, index)=>{
+                                    return <li key={index}>{manu}</li>
                                 })}
                             </ol>
                     </div>}

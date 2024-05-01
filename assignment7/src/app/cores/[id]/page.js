@@ -1,3 +1,4 @@
+import { NotFound } from "@/component/NotFound";
 import { getSingle, getAllIds } from "@/utility/helper";
 import { CoreIndi } from "./Core";
 
@@ -15,5 +16,7 @@ export default async function CoreSingle({params}){
  
     if(data){
        return <CoreIndi coreData = {data}/>
+    }else{
+     return <NotFound/>
     }
 }

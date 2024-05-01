@@ -5,7 +5,6 @@ import Link from "next/link";
 
 export const CoreIndi=({coreData})=>{
     const[data, setData] = useState(coreData);
-    console.log(data);
     return <article>
             {data&& 
             <div className="coresContainer">
@@ -34,8 +33,8 @@ export const CoreIndi=({coreData})=>{
                                      <hr></hr>
                                 </div>
                                 <ol >
-                                    {data.launches.map((launch)=>{
-                                        return <li><Link href ={`/launches/${launch}`}>{launch}</Link></li>
+                                    {data.launches.map((launch, index)=>{
+                                        return <li key={index} ><Link href ={`/launches/${launch}`}>{launch}</Link></li>
                                     })}
                                 </ol>
                             </div>

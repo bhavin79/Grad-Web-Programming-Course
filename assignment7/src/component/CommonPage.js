@@ -24,12 +24,11 @@ export const GenericPage = ({data, ListComponent, category})=>{
         <div>
             <div className="navigatioButton">
             {prevNextPage.prev  && <Link href={`/${category}/page/${data.page - 2}`}>
-              <button >prev</button> </Link>
+              <button className="btn" >prev</button> </Link>
             }
            {prevNextPage.next&&  <Link href={`/${category}/page/${data.page}`}>
-              <button >next</button> </Link>}
+              <button className="btn" >next</button> </Link>}
             </div>
         </div>
-      
     </>
 }

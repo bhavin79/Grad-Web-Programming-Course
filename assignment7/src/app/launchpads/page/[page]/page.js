@@ -18,7 +18,6 @@ export default async function LaunchPadsPage({params}){
         return <InValidInput msg={"Page Number must be non negative digits"}/>;
     }
     const data = await fetchData("launchpads", pageNumber + 1);
-    console.log(data);
     if(data.docs.length ==0){
         return <NotFound/>
     }
